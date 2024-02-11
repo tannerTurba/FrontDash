@@ -1,13 +1,14 @@
-import { CakeIcon } from '@heroicons/react/24/outline';
+import { IoFastFood } from "react-icons/io5";
+
 
 
 export default function AcmeLogo() {
   return (
     <div
-      className={`flex flex-row items-center leading-none text-white`}
+      className="flex items-center space-x-2"
     >
-      <CakeIcon className="h-12 w-12 rotate-[15deg]" />
-      <p className="text-[44px]">FrontDash</p>
+     <IoFastFood className="h-12 w-12" /> 
+     <p className="h-12 w-12 text-[38px]">FrontDash</p>
     </div>
   );
 }
