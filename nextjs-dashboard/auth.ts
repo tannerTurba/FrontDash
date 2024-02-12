@@ -1,7 +1,7 @@
 'use server';
 
 import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { PrismaClient, User } from '@prisma/client';
@@ -10,7 +10,7 @@ import { authConfig } from './auth.config';
 const prisma = new PrismaClient();
 
 async function getUser(username: string): Promise<User | null> {
-    const users: User[] | null = await prisma.user.findMany({
+    const users = await prisma.user.findMany({
         where: {
             username: username,
         },
@@ -23,12 +23,12 @@ async function getUser(username: string): Promise<User | null> {
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
-    Credentials({
+    CredentialsProvider({
         credentials: {
-            username: { label: "Username" },
+            username: { label: "Username", type: "text" },
             password: {  label: "Password", type: "password" }
         },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const parsedCredentials = z
           .object({ username: z.string(), password: z.string().min(6) })
           .safeParse(credentials);
