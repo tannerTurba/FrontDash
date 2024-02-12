@@ -1,7 +1,9 @@
 import { IoFastFood } from "react-icons/io5";
 import { Button } from '@/app/ui/button';
+import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import Link from 'next/link';
 
-export default function LoginPage() {
+export default function Page() {
   return (
     <main className="flex items-center justify-center md:h-screen bg-blue-700">
       <div className="relative mx-auto flex w-full flex-col space-y-2.5 p-4 md:-mt-32">
@@ -17,8 +19,18 @@ export default function LoginPage() {
           enthusiasts seeking diverse dining experiences delivered straight to their doorstep.
         </p>
         <div className="flex h-8 items-center justify-center space-x-1">
-          <Button href='/loginPage'>Login</Button>
-          <Button>Register</Button>
+          <Link
+            href="/login"
+            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
+          >
+            <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
+          </Link>
+          <Link
+            href="/"
+            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
+          >
+            <span>Register</span> <ArrowRightIcon className="w-5 md:w-6" />
+          </Link>
         </div>
       </div>
       
