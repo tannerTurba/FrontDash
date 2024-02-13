@@ -1,8 +1,6 @@
 import { IoFastFood } from "react-icons/io5";
 
-
-
-export default function AcmeLogo() {
+export default function FontDashLogo() {
   return (
     <div
       className="flex items-center space-x-2"

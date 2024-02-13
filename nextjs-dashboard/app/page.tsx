@@ -1,5 +1,4 @@
-import { IoFastFood } from "react-icons/io5";
-import { Button } from '@/app/ui/button';
+import FrontDashLogo from '@/app/ui/FrontashLogo';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
@@ -8,8 +7,7 @@ export default function Page() {
     <main className="flex items-center justify-center md:h-screen bg-blue-700">
       <div className="relative mx-auto flex w-full flex-col space-y-2.5 p-4 md:-mt-32">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '180px', fontSize: '120px', textAlign: 'center' }}>
-          <IoFastFood className="h-25 w-25" />
-          <span style={{ marginLeft: '10px' }}>FrontDash</span>
+          <FrontDashLogo />
         </div>
         <p style={{ textAlign: 'center', fontSize: '1.5rem' }}>
           FrontDash is a food delivery 
