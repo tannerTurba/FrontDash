@@ -4,25 +4,53 @@ import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  RectangleGroupIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
-const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  {
-    name: 'Orders',
-    href: '/dashboard/orders',
-    icon: DocumentDuplicateIcon,
-  },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
-];
-
-export default function NavLinks() {
+export default async function NavLinks(args) {
   const pathname = usePathname();
+  let userRole = args.userRole;
+
+  let links = [];
+  if (userRole == 'manager') {
+    links = [
+      { name: 'Home', href: '/dashboard', icon: HomeIcon },
+      {
+        name: 'Orders',
+        href: '/dashboard/orders',
+        icon: DocumentDuplicateIcon,
+      },
+      { name: 'Employees', href: '/dashboard/employees', icon: UserGroupIcon },
+      { name: 'Menu', href: '/dashboard/menu', icon: RectangleGroupIcon },
+      { name: 'Restaurant Hours', href: '/dashboard/hours', icon: ClockIcon }
+    ];
+  }
+  else if (userRole == 'employee') {
+    links = [
+      { name: 'Home', href: '/dashboard', icon: HomeIcon },
+      {
+        name: 'Orders',
+        href: '/dashboard/orders',
+        icon: DocumentDuplicateIcon,
+      },
+      { name: 'Menu', href: '/dashboard/menu', icon: RectangleGroupIcon },
+      { name: 'Restaurant Hours', href: '/dashboard/hours', icon: ClockIcon }
+    ];
+  }
+  else {
+    links = [
+      { name: 'Home', href: '/dashboard', icon: HomeIcon },
+      {
+        name: 'Orders',
+        href: '/dashboard/orders',
+        icon: DocumentDuplicateIcon,
+      }
+    ];
+  }
 
   return (
     <>
