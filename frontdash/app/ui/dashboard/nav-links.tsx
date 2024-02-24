@@ -16,7 +16,6 @@ export default async function NavLinks(args) {
   let userRole = args.userRole;
 
   let links = [];
-  console.log(`UserRole: ${userRole}`);
   if (userRole == 'manager') {
     links = [
       { name: 'Home', href: '/dashboard', icon: HomeIcon },

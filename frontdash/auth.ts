@@ -16,12 +16,14 @@ export async function getUser(username: string): Promise<User | null> {
         username: username,
     },
   });
-  console.log(JSON.stringify(user));
   return user as User;
 }
 
 export async function getUserRole() {
-  return await getRole(cookies().get('username').value);
+  if (cookies().has('username')) {
+    return await getRole(cookies().get('username').value);
+  }
+  return 'unauthorized';
 }
 
 async function getRole(username: string): Promise<string | null> {
@@ -80,7 +82,8 @@ export const { auth, signIn, signOut } = NextAuth({
             const passwordsMatch = await bcrypt.compare(password, user.password as string);
             console.log(passwordsMatch);
             if (passwordsMatch) {
-                return Promise.resolve(user);
+              cookies().set('username', user.username);
+              return Promise.resolve(user);
             }
         }
 

@@ -6,7 +6,7 @@ export const authConfig = {
   },
   callbacks: {
     jwt: async ({ token, user, session }) => {
-      console.log("jwt callback", {token, user, session});
+      // console.log("jwt callback", {token, user, session});
       if (user) {
         return {
           ...token,
@@ -18,7 +18,7 @@ export const authConfig = {
       return token;
     },
     session: async ({ session, token, user }) => {
-      console.log("session callback", {session, token, user});
+      // console.log("session callback", {session, token, user});
       if (token) {
         return {
           ...session,
