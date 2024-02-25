@@ -60,8 +60,6 @@ import { authenticate } from '@/app/lib/actions';
               </div>
             </div>
           </div>
-          <LoginButton />
-          <CreateAccountButton />
           <div 
             className="flex h-8 items-end space-x-1"
             aria-live='polite'
@@ -74,6 +72,8 @@ import { authenticate } from '@/app/lib/actions';
               </>
             )}
           </div>
+          <LoginButton />
+          <CreateAccountButton />
         </div>
       </form>
     );
