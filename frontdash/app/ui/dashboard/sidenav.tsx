@@ -6,9 +6,6 @@ import AccountCard from './account-card';
 
 export default async function SideNav() {
   const userData = await getUserData();
-  if (userData !== 'unauthorized') {
-
-  }
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">

@@ -1,18 +1,14 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
-import { redirect } from 'next/dist/server/api-utils';
 
 export async function authenticate (
   prevState: string | undefined,
   formData: FormData,
 ) {
   try {
-    let x = await signIn('credentials', formData, {
-      redirect: "false"
-    });
-    console.log(x);
+    await signIn('credentials', formData);
   } 
   catch (error) {
     console.error(error);
@@ -26,4 +22,16 @@ export async function authenticate (
     }
     throw error;
   }
+}
+
+export async function changePassword (
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  const password = formData.get('password').toString();
+  const confirmPassword = formData.get('confirm-password').toString();
+  if (password !== confirmPassword) {
+    return 'Passwords do not match.';
+  }
+  return await changeCredentials(password);
 }
