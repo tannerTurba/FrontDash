@@ -16,12 +16,26 @@ export async function getUser(username: string): Promise<User | null> {
         username: username,
     },
   });
+  prisma.$disconnect();
   return user as User;
 }
 
 export async function getUserRole() {
   if (cookies().has('username')) {
     return await getRole(cookies().get('username').value);
+  }
+  return 'unauthorized';
+}
+
+export async function getUserData() {
+  if (cookies().has('username')) {
+    const username = cookies().get('username').value;
+    let user = await getUser(username);
+    let role = await getRole(username);
+    return {
+      ...user,
+      role: role
+    };
   }
   return 'unauthorized';
 }
@@ -44,6 +58,27 @@ async function getRole(username: string): Promise<string | null> {
   if (user) {
     return user[0].title;
   }
+}
+
+export async function changeCredentials(newPassword: string) {
+  const username = cookies().get('username').value;
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  let status = "";
+
+  try {
+    const updatedRow = await prisma.user.update({
+      where: { username: username },
+      data: { password: hashedPassword },
+    });
+    status = "Password updated successfully."
+  }
+  catch (error) {
+    status = error.toString;
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+  return status;
 }
  
 export const { auth, signIn, signOut } = NextAuth({
