@@ -5,6 +5,31 @@ export const authConfig = {
     signIn: '/login',
   },
   callbacks: {
+    jwt: async ({ token, user, session }) => {
+      // console.log("jwt callback", {token, user, session});
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          name: user.name,
+          email: user.email
+        }
+      }
+      return token;
+    },
+    session: async ({ session, token, user }) => {
+      // console.log("session callback", {session, token, user});
+      if (token) {
+        return {
+          ...session,
+            ...session.user,
+            id: token.id,
+            name: token.name,
+            email: token.email
+        };
+      } 
+      return session;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
