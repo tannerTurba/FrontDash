@@ -28,9 +28,12 @@ function MyComponent() {
       {/* Map over the entities and create a div for each */}
       {entities.map(order => (
         <div key={order.id}>
-          {/* Render the content of each entity */}
-          <p>{order.name}</p>
-          {/* Add more content as needed */}
+    
+        <p>{order.price}</p>
+        <p>{order.status}</p>
+        <p>{order.time}</p>
+        <p>{order.tips}</p>
+        
         </div>
       ))}
     </div>
