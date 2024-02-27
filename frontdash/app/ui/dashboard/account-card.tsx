@@ -13,7 +13,7 @@ export default async function AccountCard(args) {
 
     return (
         <Link href={'/dashboard/account'}>
-        <div className={clsx('flex items-center gap-x-6 hover:text-blue-600', 
+        <div className={clsx('flex items-center gap-x-6 hover:text-blue-600 dark:hover:text-blue-400', 
             { 'text-blue-600': pathname === '/dashboard/account' }
         )}>
           {getProfilePic(image, name)}
@@ -29,7 +29,7 @@ export default async function AccountCard(args) {
 function getProfilePic(image, name) {
     const pathname = usePathname();
     if (image != null || image != undefined) {
-        return <img className={clsx("h-12 w-12 rounded-full ml-3", { 'border-2 border-blue-600': pathname === '/dashboard/account' })} src={image} alt="" />
+        return <img className={clsx("h-12 w-12 rounded-full ml-3", { 'border-2 border-blue-600 dark:border-blue-400': pathname === '/dashboard/account' })} src={image} alt="" />
     } 
     else {
         let letters = name.split(" ")[0].toUpperCase()[0];
@@ -38,7 +38,7 @@ function getProfilePic(image, name) {
         } 
         return (
             <div className={clsx("relative inline-flex items-center justify-center w-12 h-12 ml-3 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600",
-                { 'border-2 border-blue-600': pathname === '/dashboard/account' }
+                { 'border-2 border-blue-600 dark:border-blue-400': pathname === '/dashboard/account' }
             )}>
                 <span className="font-medium text-gray-600 dark:text-gray-300">{letters}</span>
             </div>
