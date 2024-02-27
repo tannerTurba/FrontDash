@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+'use client'
+
+import React, { useEffect, useState } from 'react';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -19,10 +21,6 @@ function MyComponent() {
 
     fetchEntities();
 
-    // Cleanup function
-    return () => {
-      prisma.$disconnect();
-    };
   }, []);
 
   return (
