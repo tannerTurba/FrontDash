@@ -2,7 +2,7 @@ import type { NextAuthConfig } from 'next-auth';
  
 export const authConfig = {
   pages: {
-    signIn: '/login',
+    signIn: '/',
   },
   callbacks: {
     jwt: async ({ token, user, session }) => {
@@ -32,12 +32,14 @@ export const authConfig = {
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      if (isOnDashboard) {
+      const isOnDashboard = nextUrl.pathname === '/';
+      const isOnLogIn = nextUrl.pathname.startsWith('/login');
+
+      if (!isOnDashboard && !isOnLogIn) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/dashboard', nextUrl));
+      } else if (isLoggedIn && isOnLogIn) {
+        return Response.redirect(new URL('/', nextUrl));
       }
       return true;
     },

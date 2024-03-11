@@ -44,7 +44,7 @@ export default async function Page() {
   return (
     <main>
       <div className="grow p-6 md:overflow-y-auto md:p-12">
-          <GridList cards={cards} />
+        <GridList cards={cards} />
       </div>
     </main>
   );

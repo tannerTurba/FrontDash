@@ -2,7 +2,6 @@
 
 import {
   UserGroupIcon,
-  HomeIcon,
   DocumentDuplicateIcon,
   RectangleGroupIcon,
   ClockIcon
@@ -11,46 +10,24 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
-export default async function NavLinks(args) {
-  const pathname = usePathname();
-  let userRole = args.userRole;
+let order = { name: 'Orders', href: '/orders', icon: DocumentDuplicateIcon };
+let employees = { name: 'Employees', href: '/employees', icon: UserGroupIcon };
+let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
+let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
 
-  let links = [];
+function getLinks(userRole) {
   if (userRole == 'manager') {
-    links = [
-      { name: 'Home', href: '/dashboard', icon: HomeIcon },
-      {
-        name: 'Orders',
-        href: '/dashboard/orders',
-        icon: DocumentDuplicateIcon,
-      },
-      { name: 'Employees', href: '/dashboard/employees', icon: UserGroupIcon },
-      { name: 'Menu', href: '/dashboard/menu', icon: RectangleGroupIcon },
-      { name: 'Restaurant Hours', href: '/dashboard/hours', icon: ClockIcon }
-    ];
+    return [order, employees, menu, restaurantHours];
   }
   else if (userRole == 'employee') {
-    links = [
-      { name: 'Home', href: '/dashboard', icon: HomeIcon },
-      {
-        name: 'Orders',
-        href: '/dashboard/orders',
-        icon: DocumentDuplicateIcon,
-      },
-      { name: 'Menu', href: '/dashboard/menu', icon: RectangleGroupIcon },
-      { name: 'Restaurant Hours', href: '/dashboard/hours', icon: ClockIcon }
-    ];
+    return [order, menu, restaurantHours];
   }
-  else {
-    links = [
-      { name: 'Home', href: '/dashboard', icon: HomeIcon },
-      {
-        name: 'Orders',
-        href: '/dashboard/orders',
-        icon: DocumentDuplicateIcon,
-      }
-    ];
-  }
+  return [];
+}
+
+export default async function NavLinks(args) {
+  const pathname = usePathname();
+  let links = getLinks(args.userRole);
 
   return (
     <>
