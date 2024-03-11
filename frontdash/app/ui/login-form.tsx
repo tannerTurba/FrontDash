@@ -16,7 +16,7 @@ import { authenticate } from '@/app/lib/actions';
     return (
       <form action={dispatch} className="space-y-3">
         <div className="flex-1 rounded-lg bg-gray-50 dark:bg-gray-900 px-6 pb-4 pt-8">
-        <h1 className={`$ mb-3 text-2xl text-gray-900 dark:text-gray-100`}>
+          <h1 className={`$ mb-3 text-2xl text-gray-900 dark:text-gray-100`}>
             Log into your account
           </h1>
           <div className="w-full">
@@ -84,7 +84,7 @@ import { authenticate } from '@/app/lib/actions';
 
     return (
       <Button className="mt-4 w-full" aria-disabled={pending}>
-        Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50 dark:text-gray-900" />
+        Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
       </Button>
     );
   }
@@ -92,7 +92,7 @@ import { authenticate } from '@/app/lib/actions';
   function CreateAccountButton() {
     return (
       <Button className='mt-4 w-full'>
-        Create Account <ArrowRightIcon className='ml-auto h-5 w-5 text-gray-50 dark:text-gray-900' />
+        Create Account <ArrowRightIcon className='ml-auto h-5 w-5 text-gray-50' />
       </Button>
     );
   }
