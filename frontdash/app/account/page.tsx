@@ -1,4 +1,3 @@
-import FrontDashLogo from '@/app/ui/FrontashLogo';
 import EditAccountForm from '@/app/ui/dashboard/account/edit-account-form';
 
 export default async function AccountPage() {
