@@ -2,7 +2,9 @@
 
 import { z } from 'zod';
 import { PrismaClient, User, Business, ContactInfo } from '@prisma/client';
-import { cookies } from 'next/headers';
+import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
+import { insertBusiness, insertBusinessReachedAt } from '@/scripts/business';
+import { insertContactInfo } from '@/scripts/contactInfo';
 
 const prisma = new PrismaClient();
 
@@ -45,46 +47,42 @@ export async function registerRestaurant(data: Object, image: Blob) : Promise<st
             } = parsedCredentials.data;
 
             // Create new business row
-            let business: Business;
-            try {
-                let arrayBuffer = await image.arrayBuffer();
-                let buffer = Buffer.from(arrayBuffer);
-                business = await prisma.business.create({
-                    data: {
-                        name: name, 
-                        image: buffer,
-                        description: about
-                    }
-                });
-            }
-            catch (error) {
-                console.error('Error inserting Business data:', error);
-                prisma.$disconnect();
-            }
-
+            let arrayBuffer = await image.arrayBuffer();
+            let buffer = Buffer.from(arrayBuffer);
+            let business = await insertBusiness(name, buffer, about);
+                
             // Create new contactInfo row
-            let contactInfo: ContactInfo;
-            try {
-                contactInfo = await prisma.contactInfo.create({
-                    data: {
-                        firstName: firstName, 
-                        lastName: lastName,
-                        phoneNumber: parseFloat(phone),
-                        buildingNumber: buildingNumber,
-                        street: streetAddress,
-                        unitNumber: unitNumber,
-                        city: city,
-                        state: state,
-                        zipCode: zip,
-                        email: email
-                    }
-                });
-            }
-            catch (error) {
-                console.error('Error inserting ContactInfo data:', error);
-                prisma.$disconnect();
-            }
-        }
+            let contactInfo = await insertContactInfo(firstName, lastName, phone, buildingNumber, streetAddress, unitNumber, city, state, zip, email);
 
-    return "";
+            // Insert relationship
+            await insertBusinessReachedAt(business.id.toString(), contactInfo.id.toString());
+            
+            // Insert manager account
+            let manager = {
+                username: `${business.name}${business.id}`,
+                password: generatePassword(6),
+                status: 'pending'
+            }
+            let managerId = await createUser(manager.username, manager.password, manager.password).then((data) => {return data.id});
+            
+            // Insert manager relations
+            await insertUserReachedAt(managerId.toString(), contactInfo.id.toString());
+            await insertWorksAs(managerId, 3, 'active');
+            await insertWorksFor(managerId, business.id);
+
+            return `Restaurant registered! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;
+        }
+    return "Error: could not register restaurant";
+}
+
+function generatePassword(length: number) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
 }
