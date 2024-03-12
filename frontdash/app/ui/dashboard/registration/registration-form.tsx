@@ -2,14 +2,13 @@
 
 import {
     ExclamationCircleIcon,
-    CheckCircleIcon,
-    PhotoIcon
+    CheckCircleIcon
   } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { submitRestaurant } from '@/app/lib/actions';
 import Link from 'next/link';
-  
+
   export default function RegistrationForm() {
     const [errorMessage, dispatch] = useFormState(submitRestaurant, undefined);
 
@@ -65,14 +64,14 @@ import Link from 'next/link';
                         </label>
                         <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 bg-white">
                             <div className="text-center">
-                                <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                <img id='display' src=""/>
+                                <div className="justify-center mt-4 flex text-sm leading-6 text-gray-600">
                                     <label
                                         htmlFor="file-upload"
                                         className="relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500"
                                     >
                                         <span>Upload a file</span>
-                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={uploadImage} />
                                     </label>
                                     <p className="pl-1">or drag and drop</p>
                                 </div>
@@ -306,5 +305,23 @@ import Link from 'next/link';
                 <p className='text-sm text-red-500'>{message}</p>
             </>
         );
+    }
+}
+
+
+function uploadImage() {
+    let fileUpload = document.getElementById('file-upload') as HTMLInputElement;
+    let file = fileUpload.files[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        
+        reader.onload = function() {
+            let dataURL = reader.result as string;
+            (document.getElementById('display') as HTMLImageElement).src = dataURL;
+            
+            let blob = new Blob([reader.result], { type: file.type });
+            fileUpload.value = JSON.stringify(blob);
+        }
     }
 }

@@ -53,8 +53,9 @@ export async function submitRestaurant (
     streetAddress: formData.get('streetAddress').toString(),
     city: formData.get('city').toString(),
     state: formData.get('state').toString(),
-    zip: formData.get('zip').toString()
+    zip: formData.get('zip').toString(),
   };
-
-  return await registerRestaurant(data);
+  let imageBlob: Blob = JSON.parse( formData.get('file-upload').toString() );
+  
+  return await registerRestaurant(data, imageBlob);
 }
