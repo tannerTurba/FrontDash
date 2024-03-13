@@ -37,3 +37,22 @@ export async function insertContactInfo(
     }
     return null;
 }
+
+export async function emailExists(email: string): Promise<boolean> {
+    const prisma = new PrismaClient();
+    let contact = null;
+    try {
+        contact = await prisma.contactInfo.findUnique({
+            where: {
+                email: email
+            },
+        });
+    }
+    catch (error) {
+        console.error('Error checking for existing email: ', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+    return !!contact;
+}

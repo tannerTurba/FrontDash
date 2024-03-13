@@ -4,11 +4,11 @@ import { z } from 'zod';
 import { PrismaClient, User, Business, ContactInfo } from '@prisma/client';
 import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
 import { insertBusiness, insertBusinessReachedAt } from '@/scripts/business';
-import { insertContactInfo } from '@/scripts/contactInfo';
+import { insertContactInfo, emailExists } from '@/scripts/contactInfo';
 
 const prisma = new PrismaClient();
 
-export async function registerRestaurant(data: Object, image: Blob) : Promise<string> {
+export async function registerRestaurant(data: Object) : Promise<string> {
     const parsedCredentials = z
         .object({ 
             name: z.string().max(30),
@@ -24,7 +24,7 @@ export async function registerRestaurant(data: Object, image: Blob) : Promise<st
             streetAddress: z.string().min(1).max(30),
             city: z.string().min(1).max(30),
             state: z.string().min(1).max(20),
-            zip: z.string().regex( /[0-9]{5}-[0-9]{4}/, {
+            zip: z.string().regex(/[0-9]{5}(-[0-9]{4})?/, {
                 message: 'Invalid zip code.'
             })
         })
@@ -46,10 +46,16 @@ export async function registerRestaurant(data: Object, image: Blob) : Promise<st
                 zip 
             } = parsedCredentials.data;
 
+            // Check that email doesn't already exist
+            if (await emailExists(email)) {
+                return 'This email is already registered with an account!';
+            }
+
             // Create new business row
-            let arrayBuffer = await image.arrayBuffer();
-            let buffer = Buffer.from(arrayBuffer);
-            let business = await insertBusiness(name, buffer, about);
+            // let arrayBuffer = await image.arrayBuffer();
+            // let buffer = Buffer.from(arrayBuffer);
+            let business = await insertBusiness(name, about);
+            console.log(business);
                 
             // Create new contactInfo row
             let contactInfo = await insertContactInfo(firstName, lastName, phone, buildingNumber, streetAddress, unitNumber, city, state, zip, email);
@@ -63,16 +69,18 @@ export async function registerRestaurant(data: Object, image: Blob) : Promise<st
                 password: generatePassword(6),
                 status: 'pending'
             }
-            let managerId = await createUser(manager.username, manager.password, manager.password).then((data) => {return data.id});
+            let user = await createUser(manager.username, manager.password, manager.status);
+            console.log(`USER-ID: ${user.id}--------------------------------------`);
             
             // Insert manager relations
-            await insertUserReachedAt(managerId.toString(), contactInfo.id.toString());
-            await insertWorksAs(managerId, 3, 'active');
-            await insertWorksFor(managerId, business.id);
+            await insertUserReachedAt(user.id.toString(), contactInfo.id.toString());
+            await insertWorksAs(user.id, 3, 'active');
+            await insertWorksFor(user.id, business.id);
 
-            return `Restaurant registered! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;
+            return `Success! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;
         }
-    return "Error: could not register restaurant";
+        console.error((parsedCredentials as { error: Error }).error.message);
+    return (parsedCredentials as { error: Error }).error.message.toString();
 }
 
 function generatePassword(length: number) {

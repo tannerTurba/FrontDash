@@ -15,7 +15,7 @@ import Link from 'next/link';
     return (
     <form action={dispatch} className="space-y-3">
         <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
+            <div className="border-b border-gray-900/10 dark:border-gray-100/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Restaurant Profile</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-600">
                     This information will be displayed to the customer.
@@ -35,7 +35,7 @@ import Link from 'next/link';
                                 autoComplete="name"
                                 required
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
-                                placeholder="janesmith"
+                                placeholder="McDonalds"
                                 />
                             </div>
                         </div>
@@ -52,7 +52,7 @@ import Link from 'next/link';
                                 rows={3}
                                 required
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
-                                defaultValue={''}
+                                placeholder='Greasy food and golden arches.'
                             />
                         </div>
                         <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-600">Write a few sentences about your restaurant.</p>
@@ -82,7 +82,7 @@ import Link from 'next/link';
                 </div>
             </div>
 
-            <div className="border-b border-gray-900/10 pb-12">
+            <div className="border-b border-gray-900/10 dark:border-gray-100/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Contact Information</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-600">
                     This should be the person responsible for handeling customer questions. The address is where orders will be picked up for delivery.
@@ -100,6 +100,7 @@ import Link from 'next/link';
                                 id="firstName"
                                 autoComplete="given-name"
                                 required
+                                placeholder='Ronald'
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -116,6 +117,7 @@ import Link from 'next/link';
                                 id="lastName"
                                 autoComplete="family-name"
                                 required
+                                placeholder='McDonald'
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -132,6 +134,7 @@ import Link from 'next/link';
                             type="email"
                             autoComplete="email"
                             required
+                            placeholder='superSized@gmail.com'
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -148,6 +151,7 @@ import Link from 'next/link';
                             type="tel"
                             pattern="\([0-9]{3}\)[0-9]{3}-[0-9]{4}"
                             autoComplete="phone"
+                            placeholder='(xxx)xxx-xxxx'
                             required
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -194,6 +198,7 @@ import Link from 'next/link';
                             name="street-address"
                             id="streetAddress"
                             autoComplete="street-address"
+                            placeholder='110 N Carpenter St'
                             required
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -210,6 +215,7 @@ import Link from 'next/link';
                             name="city"
                             id="city"
                             required
+                            placeholder='Chicago'
                             autoComplete="address-level2"
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -223,30 +229,15 @@ import Link from 'next/link';
                         <div className="mt-2">
                             <input
                             type="text"
-                            name="region"
+                            name="state"
                             id="state"
+                            placeholder='IL'
                             required
                             autoComplete="address-level1"
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
-
-                    {/* <div className="sm:col-span-3">
-                        <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
-                            Country
-                        </label>
-                        <div className="mt-2">
-                            <input
-                            type="text"
-                            id="country"
-                            name="country"
-                            required
-                            autoComplete="country-name"
-                            className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div> */}
 
                     <div className="sm:col-span-2">
                         <label htmlFor="postal-code" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -258,6 +249,7 @@ import Link from 'next/link';
                             name="postal-code"
                             id="postal-code"
                             required
+                            placeholder='60607'
                             autoComplete="postal-code"
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -290,7 +282,7 @@ import Link from 'next/link';
   }
 
   function ErrorMessage(message) {
-    if (message === 'Password updated successfully.') {
+    if (message.includes('Success')) {
         return (
             <>
                 <CheckCircleIcon className='h-5 w-5 text-green-500' />
@@ -319,9 +311,6 @@ function uploadImage() {
         reader.onload = function() {
             let dataURL = reader.result as string;
             (document.getElementById('display') as HTMLImageElement).src = dataURL;
-            
-            let blob = new Blob([reader.result], { type: file.type });
-            fileUpload.value = JSON.stringify(blob);
         }
     }
 }

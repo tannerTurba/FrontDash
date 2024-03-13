@@ -44,18 +44,26 @@ export async function submitRestaurant (
   const data = {
     name: formData.get('name').toString(),
     about: formData.get('about').toString(),
-    firstName: formData.get('firstName').toString(),
-    lastName: formData.get('lastName').toString(),
+    firstName: formData.get('first-name').toString(),
+    lastName: formData.get('last-name').toString(),
     email: formData.get('email').toString(),
     phone: formData.get('phone').toString(),
     buildingNumber: formData.get('buildingNumber').toString(),
     unitNumber: formData.get('unitNumber').toString(),
-    streetAddress: formData.get('streetAddress').toString(),
+    streetAddress: formData.get('street-address').toString(),
     city: formData.get('city').toString(),
     state: formData.get('state').toString(),
-    zip: formData.get('zip').toString(),
+    zip: formData.get('postal-code').toString(),
   };
-  let imageBlob: Blob = JSON.parse( formData.get('file-upload').toString() );
+  // let upload = formData.get('file-upload').toString();
+  // console.log(upload);
+  // let imageBlob: Blob;
+  // if (upload) {
+  //   imageBlob = JSON.parse( upload );
+  // }
+  // else {
+  //   imageBlob = null;
+  // }
   
-  return await registerRestaurant(data, imageBlob);
+  return await registerRestaurant(data);
 }

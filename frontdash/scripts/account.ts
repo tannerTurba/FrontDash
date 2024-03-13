@@ -25,7 +25,7 @@ export async function createUser(username: string, password: string, status: str
 export async function insertUserReachedAt(userId: string, contactId: string) {
   const prisma = new PrismaClient();
   try {
-    await prisma.$queryRaw`INSERT INTO ReachedAt (userId, contactId, businessId) VALUES (\'${userId}\', \'${contactId}\', NULL)`;
+    await prisma.$queryRaw`INSERT INTO ReachedAt (userId, contactId, businessId) VALUES (${userId}, ${contactId}, NULL)`;
   }
   catch (error) {
     console.error('Error executing raw query(insertUserReachedAt):', error);
@@ -38,7 +38,7 @@ export async function insertUserReachedAt(userId: string, contactId: string) {
 export async function insertWorksAs(userId: number, roleId: number, status: string) {
   const prisma = new PrismaClient();
   try {
-    await prisma.$queryRaw`INSERT INTO WorksAs (userId, roleId, status) VALUES (\'${userId}\', \'${roleId}\', \'${status}\')`;
+    await prisma.$queryRaw`INSERT INTO WorksAs (userId, roleId, status) VALUES (${userId}, ${roleId}, ${status})`;
   }
   catch (error) {
     console.error('Error executing raw query(insertWorksAs):', error);
@@ -51,7 +51,7 @@ export async function insertWorksAs(userId: number, roleId: number, status: stri
 export async function insertWorksFor(userId: number, businessId: number) {
   const prisma = new PrismaClient();
   try {
-    await prisma.$queryRaw`INSERT INTO WorksFor (employeeId, businessId) VALUES (\'${userId}\', \'${businessId}\')`;
+    await prisma.$queryRaw`INSERT INTO WorksFor (userId, businessId) VALUES (${userId}, ${businessId})`;
   }
   catch (error) {
     console.error('Error executing raw query(insertWorksFor):', error);
