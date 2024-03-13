@@ -1,6 +1,6 @@
 'use server';
 
-import { z } from 'zod';
+import { ZodError, ZodErrorMap, z } from 'zod';
 import { PrismaClient, User, Business, ContactInfo } from '@prisma/client';
 import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
 import { insertBusiness, insertBusinessReachedAt } from '@/scripts/business';
@@ -79,8 +79,9 @@ export async function registerRestaurant(data: Object) : Promise<string> {
 
             return `Success! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;
         }
-        console.error((parsedCredentials as { error: Error }).error.message);
-    return (parsedCredentials as { error: Error }).error.message.toString();
+        let err = parsedCredentials as { error: ZodError };
+        let messages = err.error.errors.map((x) => x.message);
+    return messages.join(", ");
 }
 
 function generatePassword(length: number) {

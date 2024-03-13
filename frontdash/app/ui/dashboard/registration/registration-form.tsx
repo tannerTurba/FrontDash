@@ -149,7 +149,6 @@ import Link from 'next/link';
                             id="phone"
                             name="phone"
                             type="tel"
-                            pattern="\([0-9]{3}\)[0-9]{3}-[0-9]{4}"
                             autoComplete="phone"
                             placeholder='(xxx)xxx-xxxx'
                             required
