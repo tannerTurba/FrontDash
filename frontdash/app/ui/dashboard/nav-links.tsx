@@ -17,9 +17,12 @@ let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
 let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
 let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon };
 
-function getLinks(userRole) {
-  if (userRole == 'manager') {
+function getLinks(userRole, status) {
+  if (userRole == 'manager' && status == 'active') {
     return [order, employees, menu, restaurantHours];
+  }
+  else if (userRole == 'manager' && status == 'pending') {
+    return [];
   }
   else if (userRole == 'employee') {
     return [order, menu, restaurantHours];
@@ -29,7 +32,7 @@ function getLinks(userRole) {
 
 export default async function NavLinks(args) {
   const pathname = usePathname();
-  let links = getLinks(args.userRole);
+  let links = getLinks(args.userRole, args.status);
 
   return (
     <>

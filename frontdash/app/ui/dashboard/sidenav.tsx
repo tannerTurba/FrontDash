@@ -16,7 +16,7 @@ export default async function SideNav() {
         <Link href="/" className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-blue-500 p-3 text-sm font-medium hover:bg-blue-400 hover:text-sky-100 md:flex-none md:justify-start md:p-2 md:px-3 text-sky-50">
           <FrontDashLogo />
         </Link>
-        {<NavLinks userRole={userData === 'unauthorized' ? 'unauthorized' : userData.role} />}
+        {<NavLinks userRole={userData === 'unauthorized' ? 'unauthorized' : userData.role} status={userData === 'unauthorized' ? 'unathorized' : userData.status} />}
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block dark:bg-gray-900"></div>
         {userData !== 'unauthorized'? <AccountCard user={userData} /> : <></>}
         <form
@@ -50,14 +50,5 @@ function SignOutButton() {
       <PowerIcon className="w-6" />
       <div className="hidden md:block">Sign Out</div>
     </button>
-  );
-}
-
-function RegisterButton() {
-  return (
-    <Link href="/registration" className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3 dark:bg-gray-950 dark:hover:bg-sky-900 dark:hover:text-blue-400">
-      <div className="hidden md:block">Register</div>
-      <ArrowRightIcon className="w-5 md:w-6" />
-    </Link>
   );
 }

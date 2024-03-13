@@ -55,15 +55,6 @@ export async function submitRestaurant (
     state: formData.get('state').toString(),
     zip: formData.get('postal-code').toString(),
   };
-  // let upload = formData.get('file-upload').toString();
-  // console.log(upload);
-  // let imageBlob: Blob;
-  // if (upload) {
-  //   imageBlob = JSON.parse( upload );
-  // }
-  // else {
-  //   imageBlob = null;
-  // }
   
   return await registerRestaurant(data);
 }

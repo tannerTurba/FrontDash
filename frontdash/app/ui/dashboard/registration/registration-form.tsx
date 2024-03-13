@@ -57,7 +57,7 @@ import Link from 'next/link';
                         </div>
                         <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-600">Write a few sentences about your restaurant.</p>
                     </div>
-
+{/* 
                     <div className="col-span-full">
                         <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
                             Cover photo
@@ -71,14 +71,14 @@ import Link from 'next/link';
                                         className="relative cursor-pointer rounded-md bg-white dark:bg-gray-900 font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 dark:focus-within:ring-blue-400 focus-within:ring-offset-2 hover:text-blue-500"
                                     >
                                         <span>Upload a file</span>
-                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={uploadImage} />
+                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={displayImage} />
                                     </label>
                                     <p className="pl-1">or drag and drop</p>
                                 </div>
                                 <p className="text-xs leading-5 text-gray-600 dark:text-gray-600">PNG, JPG, GIF up to 10MB</p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
@@ -300,7 +300,7 @@ import Link from 'next/link';
 }
 
 
-function uploadImage() {
+function displayImage() {
     let fileUpload = document.getElementById('file-upload') as HTMLInputElement;
     let file = fileUpload.files[0];
     if (file) {

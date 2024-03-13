@@ -116,7 +116,7 @@ export const { auth, signIn, signOut } = NextAuth({
             
             const passwordsMatch = await bcrypt.compare(password, user.password as string);
             console.log(passwordsMatch);
-            if (passwordsMatch) {
+            if (passwordsMatch && user.status !== 'inactive') {
               cookies().set('username', user.username);
               return Promise.resolve(user);
             }

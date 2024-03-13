@@ -1,12 +1,9 @@
 'use server';
 
-import { ZodError, ZodErrorMap, z } from 'zod';
-import { PrismaClient, User, Business, ContactInfo } from '@prisma/client';
+import { ZodError, z } from 'zod';
 import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
 import { insertBusiness, insertBusinessReachedAt } from '@/scripts/business';
 import { insertContactInfo, emailExists } from '@/scripts/contactInfo';
-
-const prisma = new PrismaClient();
 
 export async function registerRestaurant(data: Object) : Promise<string> {
     const parsedCredentials = z
@@ -52,10 +49,7 @@ export async function registerRestaurant(data: Object) : Promise<string> {
             }
 
             // Create new business row
-            // let arrayBuffer = await image.arrayBuffer();
-            // let buffer = Buffer.from(arrayBuffer);
             let business = await insertBusiness(name, about);
-            console.log(business);
                 
             // Create new contactInfo row
             let contactInfo = await insertContactInfo(firstName, lastName, phone, buildingNumber, streetAddress, unitNumber, city, state, zip, email);
@@ -70,11 +64,10 @@ export async function registerRestaurant(data: Object) : Promise<string> {
                 status: 'pending'
             }
             let user = await createUser(manager.username, manager.password, manager.status);
-            console.log(`USER-ID: ${user.id}--------------------------------------`);
             
             // Insert manager relations
             await insertUserReachedAt(user.id.toString(), contactInfo.id.toString());
-            await insertWorksAs(user.id, 3, 'active');
+            await insertWorksAs(user.id, 1, 'active');
             await insertWorksFor(user.id, business.id);
 
             return `Success! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;
