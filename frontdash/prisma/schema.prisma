@@ -35,6 +35,7 @@ model Business {
   From        From[]       @ignore
   Offers      Offers[]     @ignore
   OpenDuring  OpenDuring[] @ignore
+  ReachedAt   ReachedAt[]  @ignore
   WorksFor    WorksFor[]   @ignore
 }
 
@@ -42,13 +43,15 @@ model ContactInfo {
   id             Int         @id @default(autoincrement())
   firstName      String      @db.VarChar(20)
   lastName       String      @db.VarChar(20)
-  phoneNumber    Int?
+  phoneNumber    Float?      @db.Float
   buildingNumber String?     @db.VarChar(20)
   street         String?     @db.VarChar(30)
   unitNumber     String?     @db.VarChar(20)
   city           String?     @db.VarChar(30)
   state          String?     @db.VarChar(20)
   zipCode        String?     @db.VarChar(20)
+  email          String?     @unique(map: "EMAIL") @db.VarChar(35)
+  Places         Places[]    @ignore
   ReachedAt      ReachedAt[] @ignore
 }
 
@@ -66,8 +69,8 @@ model Contains {
 }
 
 model CreditCard {
-  cardNumber     Int        @id
-  expirationDate DateTime   @db.DateTime(0)
+  cardNumber     String     @id @db.VarChar(25)
+  expirationDate String     @db.VarChar(10)
   securityCode   Int
   Owns           Owns[]     @ignore
   PaidWith       PaidWith[] @ignore
@@ -75,7 +78,7 @@ model CreditCard {
 
 model Food {
   id       Int        @id @default(autoincrement())
-  name     String?    @db.VarChar(20)
+  name     String?    @db.VarChar(40)
   image    Bytes?     @db.Blob
   price    Float?     @db.Float
   stock    Int?
@@ -136,36 +139,37 @@ model Order {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Owns {
   userId     Int?
-  cardNumber Int?
+  cardNumber String?     @db.VarChar(25)
   User       User?       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Owns_ibfk_1")
   CreditCard CreditCard? @relation(fields: [cardNumber], references: [cardNumber], onDelete: NoAction, onUpdate: NoAction, map: "Owns_ibfk_2")
 
-  @@index([cardNumber], map: "cardNumber")
   @@index([userId], map: "userId")
+  @@index([cardNumber], map: "fk_cardNumber")
   @@ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model PaidWith {
   orderId    Int?
-  cardNumber Int?
+  cardNumber String?     @db.VarChar(25)
   status     String?     @db.VarChar(20)
   Order      Order?      @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "PaidWith_ibfk_1")
   CreditCard CreditCard? @relation(fields: [cardNumber], references: [cardNumber], onDelete: NoAction, onUpdate: NoAction, map: "PaidWith_ibfk_2")
 
-  @@index([cardNumber], map: "cardNumber")
   @@index([orderId], map: "orderId")
+  @@index([cardNumber], map: "fk_cardNumber1")
   @@ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Places {
-  orderId   Int?
-  contactId Int?
-  Order     Order? @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Places_ibfk_1")
+  orderId     Int?
+  contactId   Int?
+  ContactInfo ContactInfo? @relation(fields: [contactId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "Places_2")
+  Order       Order?       @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Places_ibfk_1")
 
-  @@index([contactId], map: "contactId")
   @@index([orderId], map: "orderId")
+  @@index([contactId], map: "Places_2")
   @@ignore
 }
 
@@ -173,11 +177,14 @@ model Places {
 model ReachedAt {
   userId      Int?
   contactId   Int?
+  businessId  Int?
   User        User?        @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ReachedAt_ibfk_1")
   ContactInfo ContactInfo? @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ReachedAt_ibfk_2")
+  Business    Business?    @relation(fields: [businessId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "ReachedAt_ibfk_3")
 
   @@index([contactId], map: "contactId")
   @@index([userId], map: "userId")
+  @@index([businessId], map: "businessId")
   @@ignore
 }
 

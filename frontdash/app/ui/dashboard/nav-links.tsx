@@ -4,7 +4,8 @@ import {
   UserGroupIcon,
   DocumentDuplicateIcon,
   RectangleGroupIcon,
-  ClockIcon
+  ClockIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -14,20 +15,24 @@ let order = { name: 'Orders', href: '/orders', icon: DocumentDuplicateIcon };
 let employees = { name: 'Employees', href: '/employees', icon: UserGroupIcon };
 let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
 let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
+let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon };
 
-function getLinks(userRole) {
-  if (userRole == 'manager') {
+function getLinks(userRole, status) {
+  if (userRole == 'manager' && status == 'active') {
     return [order, employees, menu, restaurantHours];
+  }
+  else if (userRole == 'manager' && status == 'pending') {
+    return [];
   }
   else if (userRole == 'employee') {
     return [order, menu, restaurantHours];
   }
-  return [];
+  return [register];
 }
 
 export default async function NavLinks(args) {
   const pathname = usePathname();
-  let links = getLinks(args.userRole);
+  let links = getLinks(args.userRole, args.status);
 
   return (
     <>
