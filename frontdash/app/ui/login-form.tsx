@@ -73,7 +73,6 @@ import { authenticate } from '@/app/lib/actions';
             )}
           </div>
           <LoginButton />
-          <CreateAccountButton />
         </div>
       </form>
     );
@@ -85,14 +84,6 @@ import { authenticate } from '@/app/lib/actions';
     return (
       <Button className="mt-4 w-full" aria-disabled={pending}>
         Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-      </Button>
-    );
-  }
-
-  function CreateAccountButton() {
-    return (
-      <Button className='mt-4 w-full'>
-        Create Account <ArrowRightIcon className='ml-auto h-5 w-5 text-gray-50' />
       </Button>
     );
   }

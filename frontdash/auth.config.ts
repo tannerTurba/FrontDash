@@ -35,8 +35,9 @@ export const authConfig = {
       const isOnDashboard = nextUrl.pathname === '/';
       const isOnLogIn = nextUrl.pathname.startsWith('/login');
       const isOnRegistration = nextUrl.pathname.startsWith('/registration');
+      const isOnMenu = nextUrl.pathname.endsWith('/menu');
 
-      if (!isOnDashboard && !isOnLogIn && !isOnRegistration) {
+      if (!isOnDashboard && !isOnLogIn && !isOnRegistration && !isOnMenu) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn && isOnLogIn) {

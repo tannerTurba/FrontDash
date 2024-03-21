@@ -31,3 +31,15 @@ export async function insertBusiness(name: string, description: string): Promise
         await prisma.$disconnect();
     }
 }
+
+export async function getAllRestaurants(): Promise<Business[]> {
+    const prisma = new PrismaClient();
+    try {
+        return await prisma.business.findMany();
+    } catch (error) {
+        console.error('Error fetching restaurants:', error);
+        return [];
+    } finally {
+        await prisma.$disconnect();
+    }
+}

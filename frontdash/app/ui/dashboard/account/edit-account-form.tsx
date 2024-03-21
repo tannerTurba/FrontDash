@@ -17,7 +17,7 @@ import { changePassword } from '@/app/lib/actions';
       <form action={dispatch} className="space-y-3">
         <div className="flex-1 rounded-lg bg-gray-50 dark:bg-gray-900 px-6 pb-4 pt-8">
         <h1 className={`$ mb-3 text-2xl text-gray-900 dark:text-gray-100`}>
-            Edit your account
+            Change your password
           </h1>
           <div className="w-full">
             <div className="mt-4">
