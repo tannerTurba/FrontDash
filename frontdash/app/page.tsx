@@ -22,7 +22,7 @@ export default async function Page() {
           <GridList cards={restaurants.map(restaurant => ({
             title: restaurant.name,
             description: restaurant.description,
-            imageUrl: restaurant.image
+            imageUrl: "/empty.jpg" // Needs to be updated later with actual images from database
           }))} />
         </div>
       </main>
