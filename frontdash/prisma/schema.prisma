@@ -1,0 +1,243 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Availability {
+  id         Int          @id @default(autoincrement())
+  sunOpen    DateTime?    @db.Time(0)
+  sunClose   DateTime?    @db.Time(0)
+  monOpen    DateTime?    @db.Time(0)
+  monClose   DateTime?    @db.Time(0)
+  tuesOpen   DateTime?    @db.Time(0)
+  tuesClose  DateTime?    @db.Time(0)
+  wedOpen    DateTime?    @db.Time(0)
+  wedClose   DateTime?    @db.Time(0)
+  thurOpen   DateTime?    @db.Time(0)
+  thurClose  DateTime?    @db.Time(0)
+  friOpen    DateTime?    @db.Time(0)
+  friClose   DateTime?    @db.Time(0)
+  satOpen    DateTime?    @db.Time(0)
+  satClose   DateTime?    @db.Time(0)
+  OpenDuring OpenDuring[] @ignore
+  ServedOn   ServedOn[]   @ignore
+}
+
+model Business {
+  id          Int          @id @default(autoincrement())
+  name        String?      @db.VarChar(30)
+  image       Bytes?       @db.Blob
+  description String?      @db.VarChar(1000)
+  From        From[]       @ignore
+  Offers      Offers[]     @ignore
+  OpenDuring  OpenDuring[] @ignore
+  ReachedAt   ReachedAt[]  @ignore
+  WorksFor    WorksFor[]   @ignore
+}
+
+model ContactInfo {
+  id             Int         @id @default(autoincrement())
+  firstName      String      @db.VarChar(20)
+  lastName       String      @db.VarChar(20)
+  phoneNumber    Float?      @db.Float
+  buildingNumber String?     @db.VarChar(20)
+  street         String?     @db.VarChar(30)
+  unitNumber     String?     @db.VarChar(20)
+  city           String?     @db.VarChar(30)
+  state          String?     @db.VarChar(20)
+  zipCode        String?     @db.VarChar(20)
+  email          String?     @unique(map: "EMAIL") @db.VarChar(35)
+  Places         Places[]    @ignore
+  ReachedAt      ReachedAt[] @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Contains {
+  orderId  Int?
+  foodId   Int?
+  quantity Int
+  Order    Order? @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Contains_ibfk_1")
+  Food     Food?  @relation(fields: [foodId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Contains_ibfk_2")
+
+  @@index([foodId], map: "foodId")
+  @@index([orderId], map: "orderId")
+  @@ignore
+}
+
+model CreditCard {
+  cardNumber     String     @id @db.VarChar(25)
+  expirationDate String     @db.VarChar(10)
+  securityCode   Int
+  Owns           Owns[]     @ignore
+  PaidWith       PaidWith[] @ignore
+}
+
+model Food {
+  id       Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(40)
+  image    Bytes?     @db.Blob
+  price    Float?     @db.Float
+  stock    Int?
+  Contains Contains[] @ignore
+  Offers   Offers[]   @ignore
+  ServedOn ServedOn[] @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model From {
+  orderId    Int?
+  businessId Int?
+  Order      Order?    @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "From_ibfk_1")
+  Business   Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "From_ibfk_2")
+
+  @@index([businessId], map: "businessId")
+  @@index([orderId], map: "orderId")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Offers {
+  businessId Int?
+  foodId     Int?
+  Business   Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Offers_ibfk_1")
+  Food       Food?     @relation(fields: [foodId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Offers_ibfk_2")
+
+  @@index([businessId], map: "businessId")
+  @@index([foodId], map: "foodId")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model OpenDuring {
+  availabilityId Int?
+  businessId     Int?
+  Availability   Availability? @relation(fields: [availabilityId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "OpenDuring_ibfk_1")
+  Business       Business?     @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "OpenDuring_ibfk_2")
+
+  @@index([availabilityId], map: "availabilityId")
+  @@index([businessId], map: "businessId")
+  @@ignore
+}
+
+model Order {
+  id           Int        @id @default(autoincrement())
+  time         DateTime?  @db.DateTime(0)
+  price        Float?     @db.Float
+  tips         Float?     @db.Float
+  deliveryTime DateTime?  @db.DateTime(0)
+  status       String?    @db.VarChar(20)
+  Contains     Contains[] @ignore
+  From         From[]     @ignore
+  PaidWith     PaidWith[] @ignore
+  Places       Places[]   @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Owns {
+  userId     Int?
+  cardNumber String?     @db.VarChar(25)
+  User       User?       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Owns_ibfk_1")
+  CreditCard CreditCard? @relation(fields: [cardNumber], references: [cardNumber], onDelete: NoAction, onUpdate: NoAction, map: "Owns_ibfk_2")
+
+  @@index([userId], map: "userId")
+  @@index([cardNumber], map: "fk_cardNumber")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PaidWith {
+  orderId    Int?
+  cardNumber String?     @db.VarChar(25)
+  status     String?     @db.VarChar(20)
+  Order      Order?      @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "PaidWith_ibfk_1")
+  CreditCard CreditCard? @relation(fields: [cardNumber], references: [cardNumber], onDelete: NoAction, onUpdate: NoAction, map: "PaidWith_ibfk_2")
+
+  @@index([orderId], map: "orderId")
+  @@index([cardNumber], map: "fk_cardNumber1")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Places {
+  orderId     Int?
+  contactId   Int?
+  ContactInfo ContactInfo? @relation(fields: [contactId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "Places_2")
+  Order       Order?       @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Places_ibfk_1")
+
+  @@index([orderId], map: "orderId")
+  @@index([contactId], map: "Places_2")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ReachedAt {
+  userId      Int?
+  contactId   Int?
+  businessId  Int?
+  User        User?        @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ReachedAt_ibfk_1")
+  ContactInfo ContactInfo? @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ReachedAt_ibfk_2")
+  Business    Business?    @relation(fields: [businessId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "ReachedAt_ibfk_3")
+
+  @@index([contactId], map: "contactId")
+  @@index([userId], map: "userId")
+  @@index([businessId], map: "businessId")
+  @@ignore
+}
+
+model Role {
+  id      Int       @id @default(autoincrement())
+  title   String?   @db.VarChar(20)
+  WorksAs WorksAs[] @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ServedOn {
+  foodId         Int?
+  availabilityId Int?
+  Food           Food?         @relation(fields: [foodId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ServedOn_ibfk_1")
+  Availability   Availability? @relation(fields: [availabilityId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ServedOn_ibfk_2")
+
+  @@index([availabilityId], map: "availabilityId")
+  @@index([foodId], map: "foodId")
+  @@ignore
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  username  String?     @unique(map: "username") @db.VarChar(30)
+  password  String?     @db.VarChar(100)
+  status    String?     @db.VarChar(20)
+  Owns      Owns[]      @ignore
+  ReachedAt ReachedAt[] @ignore
+  WorksAs   WorksAs[]   @ignore
+  WorksFor  WorksFor[]  @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model WorksAs {
+  userId Int?
+  roleId Int?
+  status String? @db.VarChar(20)
+  User   User?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WorksAs_ibfk_1")
+  Role   Role?   @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WorksAs_ibfk_2")
+
+  @@index([roleId], map: "roleId")
+  @@index([userId], map: "userId")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model WorksFor {
+  userId     Int?
+  businessId Int?
+  User       User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WorksFor_ibfk_1")
+  Business   Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WorksFor_ibfk_2")
+
+  @@index([businessId], map: "businessId")
+  @@index([userId], map: "userId")
+  @@ignore
+}
