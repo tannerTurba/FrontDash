@@ -3,6 +3,7 @@
 import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
 import { registerRestaurant } from '@/app/lib/restaurant';
+import { registerEmployee } from './employees';
 
 export async function authenticate (
   prevState: string | undefined,
@@ -57,4 +58,19 @@ export async function submitRestaurant (
   };
   
   return await registerRestaurant(data);
+}
+
+export async function submitEmployee (
+  prevState: string | undefined,
+  formData: FormData
+) {
+  console.log(formData);
+  const data = {
+    manager: formData.get('manager').toString(),
+    firstName: formData.get('first-name').toString(),
+    lastName: formData.get('last-name').toString(),
+    phone: formData.get('phone').toString()
+  };
+  
+  return await registerEmployee(data);
 }

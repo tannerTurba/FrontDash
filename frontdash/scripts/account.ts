@@ -60,3 +60,19 @@ export async function insertWorksFor(userId: number, businessId: number) {
     await prisma.$disconnect();
   }
 }
+
+export async function getWorkingFor(userId: number) {
+  const prisma = new PrismaClient();
+  try {
+    return await prisma.$queryRaw`SELECT Business.id
+      FROM User JOIN WorksFor ON User.id = WorksFor.userId 
+        JOIN Business ON Business.id = WorksFor.businessId 
+      WHERE User.id = ${userId};` as string;
+  }
+  catch (error) {
+    console.error('Error executing raw query(getWorkingFor):', error);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+}
