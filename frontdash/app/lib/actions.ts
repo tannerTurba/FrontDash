@@ -3,7 +3,7 @@
 import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
 import { registerRestaurant } from '@/app/lib/restaurant';
-import { registerEmployee } from './employees';
+import { registerEmployee, updateContactInfo } from './employees';
 
 export async function authenticate (
   prevState: string | undefined,
@@ -36,6 +36,26 @@ export async function changePassword (
     return 'Passwords do not match.';
   }
   return await changeCredentials(password);
+}
+
+export async function changeContactInfo (
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  const data = {
+    firstName: formData.get('first-name').toString(),
+    lastName: formData.get('last-name').toString(),
+    email: formData.get('email').toString(),
+    phone: formData.get('phone').toString(),
+    buildingNumber: formData.get('buildingNumber').toString(),
+    unitNumber: formData.get('unitNumber').toString(),
+    streetAddress: formData.get('street-address').toString(),
+    city: formData.get('city').toString(),
+    state: formData.get('state').toString(),
+    zip: formData.get('postal-code').toString()
+  };
+  
+  return await updateContactInfo(data);
 }
 
 export async function submitRestaurant (
