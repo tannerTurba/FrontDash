@@ -35,14 +35,20 @@ export async function insertBusiness(name: string, description: string): Promise
 
 export async function getAllRestaurants(): Promise<Business[]> {
     const prisma = new PrismaClient();
+    let results = [];
     try {
-        return await prisma.business.findMany();
+        results = await prisma.$queryRaw`SELECT * FROM Business WHERE status = 'active'`;
+        // return await prisma.business.findMany({
+        //     where: {
+        //         status: 'active'
+        //     }
+        // });
     } catch (error) {
         console.error('Error fetching restaurants:', error);
-        return [];
     } finally {
         await prisma.$disconnect();
     }
+    return results;
 }
 
 export async function withdraw(username: string) {
