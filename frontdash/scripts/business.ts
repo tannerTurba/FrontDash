@@ -38,11 +38,6 @@ export async function getAllRestaurants(): Promise<Business[]> {
     let results = [];
     try {
         results = await prisma.$queryRaw`SELECT * FROM Business WHERE status = 'active'`;
-        // return await prisma.business.findMany({
-        //     where: {
-        //         status: 'active'
-        //     }
-        // });
     } catch (error) {
         console.error('Error fetching restaurants:', error);
     } finally {
