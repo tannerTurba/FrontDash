@@ -60,6 +60,7 @@ async function getRole(username: string): Promise<string | null> {
   }
 }
 
+
 export async function changeCredentials(newPassword: string) {
   const username = cookies().get('username').value;
   const hashedPassword = await bcrypt.hash(newPassword, 10);

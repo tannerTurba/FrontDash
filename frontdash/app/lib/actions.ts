@@ -4,6 +4,7 @@ import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
 import { registerRestaurant } from '@/app/lib/restaurant';
 import { registerEmployee } from './employees';
+import { updateUserStatus } from '@/scripts/employee';
 
 export async function authenticate (
   prevState: string | undefined,
@@ -38,6 +39,8 @@ export async function changePassword (
   return await changeCredentials(password);
 }
 
+
+
 export async function submitRestaurant (
   prevState: string | undefined,
   formData: FormData,
@@ -58,6 +61,10 @@ export async function submitRestaurant (
   };
   
   return await registerRestaurant(data);
+}
+
+export async function changeStatus(prevState: string | undefined, id: number) {
+  return updateUserStatus(id, prevState === 'active' ? 'inactive' : 'active');
 }
 
 export async function submitEmployee (

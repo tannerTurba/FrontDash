@@ -1,11 +1,11 @@
 'use client'
-import EmployeePage from '@/app/ui/employeePage'; // Corrected import statement
+import EmployeePage from '@/app/ui/employeePage'; 
 
 export default async function Page() {
   return (
-    <div>
+    <main>
       <EmployeePage /> 
-    </div>
+    </main>
   );
 }
 

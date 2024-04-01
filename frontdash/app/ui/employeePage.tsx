@@ -1,30 +1,15 @@
-
 'use client'
 import React, { useState } from 'react';
 import { getAllUsers, updateUserStatus } from '@/scripts/employee';
+import { getUserData } from '@/auth';
 
-interface Employee {
-  id: number;
-  username: string;
-  status: string;
-}
 
 export default async function page() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
   
   try {
-  
-  
+    // add getuserdata once fixed
     const businessId = '54';
-  const users = await getAllUsers(businessId);
-
-    setEmployees((users: Employee[]) =>
-      users.map((user) => ({
-        username: user.username,
-        status: user.status,
-        id: user.id,
-      }))
-    );
+    const users = await getAllUsers(businessId);
 
     return (
       <div>

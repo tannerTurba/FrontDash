@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { getAllOrders } from '@/scripts/order';
+import { getOrders } from '@/scripts/order';
 
 
 
 
 export default async function page() {
   try {
-    
-    const orders = await getAllOrders();
+    const businessId = '54';
+    const orders = await getOrders(businessId);
    
     return (
       <main>

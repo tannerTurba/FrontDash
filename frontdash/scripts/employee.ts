@@ -1,3 +1,4 @@
+
 import { PrismaClient, User } from '@prisma/client';
 
 
@@ -21,16 +22,11 @@ export async function getAllUsers(managerBusinessId: string): Promise<User[]> {
 export async function updateUserStatus(id: number, status: string) {
     const prisma = new PrismaClient();
     try {
-        
-        const newStatus = 'inactive' ? 'active' : 'inactive';
-
-        return await prisma.user.update({
-            where: { id: id },
-            data: { status: newStatus }
-        });
+        await prisma.$executeRaw`UPDATE User SET status = &{status} WHERE id = ${id};`;
+           
     } catch (error) {
         console.error('Error updating User status:', error);
     } finally {
         await prisma.$disconnect();
     }
-}
+  }
