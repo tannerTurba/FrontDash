@@ -12,14 +12,14 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 let order = { name: 'Orders', href: '/orders', icon: DocumentDuplicateIcon };
-let employees = { name: 'Employees', href: '/employees', icon: UserGroupIcon };
+let management = { name: 'Management', href: '/employees', icon: UserGroupIcon };
 let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
 let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
 let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon };
 
 function getLinks(userRole, status) {
   if (userRole == 'manager' && status == 'active') {
-    return [order, employees, menu, restaurantHours];
+    return [order, management, menu, restaurantHours];
   }
   else if (userRole == 'manager' && status == 'pending') {
     return [];

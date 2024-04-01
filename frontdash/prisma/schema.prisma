@@ -32,6 +32,7 @@ model Business {
   name        String?      @db.VarChar(30)
   image       Bytes?       @db.Blob
   description String?      @db.VarChar(1000)
+  status      String       @default("active") @db.VarChar(10)
   From        From[]       @ignore
   Offers      Offers[]     @ignore
   OpenDuring  OpenDuring[] @ignore
@@ -43,7 +44,7 @@ model ContactInfo {
   id             Int         @id @default(autoincrement())
   firstName      String      @db.VarChar(20)
   lastName       String      @db.VarChar(20)
-  phoneNumber    Float?      @db.Float
+  phoneNumber    Float?
   buildingNumber String?     @db.VarChar(20)
   street         String?     @db.VarChar(30)
   unitNumber     String?     @db.VarChar(20)
