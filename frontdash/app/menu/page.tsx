@@ -2,7 +2,7 @@ import { getFoodItemsByBusiness, getAvailabilityByBusiness, getContactInfoByBusi
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 export default async function Page() {
-  const restaurantId = '54';
+  const restaurantId = '53';
   try {
     const [menuItems, restaurant, availability, contactInfo] = await Promise.all([
       getFoodItemsByBusiness(restaurantId),
