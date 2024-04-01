@@ -7,12 +7,13 @@ import {
   } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
-import { submitEmployee } from '@/app/lib/actions';
+import { changeHours } from '@/app/lib/actions';
 import HoursRow from './hours-form-row';
+import { Availability } from '@prisma/client';
 
 export default function EditHoursForm(args) {
-    const [errorMessage, dispatch] = useFormState(submitEmployee, undefined);
-    let username = args.username;
+    const [errorMessage, dispatch] = useFormState(changeHours, undefined);
+    let availability: Availability = args.availability;
 
     return (
         <form action={dispatch} className="space-y-3">
@@ -20,13 +21,13 @@ export default function EditHoursForm(args) {
                 <div className="flex-1 rounded-lg bg-gray-50 dark:bg-gray-900 px-6 pb-4 pt-8">
                     <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Update Opening Hours</h2>
                 
-                    <HoursRow day="Sunday" />
-                    <HoursRow day="Monday" />
-                    <HoursRow day="Tuesday" />
-                    <HoursRow day="Wednesday" />
-                    <HoursRow day="Thursday" />
-                    <HoursRow day="Friday" />
-                    <HoursRow day="Saturday" />
+                    <HoursRow day="Sunday" open={availability.sunOpen} close={availability.sunClose} />
+                    <HoursRow day="Monday" open={availability.monOpen} close={availability.monClose} />
+                    <HoursRow day="Tuesday" open={availability.tuesOpen} close={availability.tuesClose} />
+                    <HoursRow day="Wednesday" open={availability.wedOpen} close={availability.wedClose} />
+                    <HoursRow day="Thursday" open={availability.thurOpen} close={availability.thurClose} />
+                    <HoursRow day="Friday" open={availability.friOpen} close={availability.friClose} />
+                    <HoursRow day="Saturday" open={availability.satOpen} close={availability.satClose} />
 
                     <div className="flex h-8 items-end space-x-1" aria-live='polite' aria-atomic='true'>
                         {errorMessage && (ErrorMessage(errorMessage))}
@@ -36,15 +37,6 @@ export default function EditHoursForm(args) {
                     </div>
                 </div>
             </div>
-
-        <input
-            type="text"
-            name="manager"
-            required
-            className='hidden'
-            value={username}
-        />
-
         </form>
     );
 }

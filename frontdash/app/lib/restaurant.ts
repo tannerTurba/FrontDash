@@ -4,6 +4,8 @@ import { ZodError, z } from 'zod';
 import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
 import { insertBusiness, insertBusinessReachedAt } from '@/scripts/business';
 import { insertContactInfo, emailExists } from '@/scripts/contactInfo';
+import { cookies } from 'next/headers';
+import { updateAvailability } from '@/scripts/availability';
 
 export async function registerRestaurant(data: Object) : Promise<string> {
     const parsedCredentials = z
@@ -87,4 +89,53 @@ function generatePassword(length: number) {
       counter += 1;
     }
     return result;
+}
+
+export async function updateHours(data: Object) : Promise<string> {
+    const username = cookies().get('username').value;
+    const parsedCredentials = z
+        .object({ 
+            sunOpen: z.string(),
+            sunClose: z.string(),
+            monOpen: z.string(),
+            monClose: z.string(),
+            tuesOpen: z.string(),
+            tuesClose: z.string(),
+            wedOpen: z.string(),
+            wedClose: z.string(),
+            thurOpen: z.string(),
+            thurClose: z.string(),
+            friOpen: z.string(),
+            friClose: z.string(),
+            satOpen: z.string(),
+            satClose: z.string(),
+        })
+        .safeParse(data);
+
+    if (parsedCredentials.success) {
+        let { 
+            sunOpen,
+            sunClose,
+            monOpen,
+            monClose,
+            tuesOpen,
+            tuesClose,
+            wedOpen,
+            wedClose,
+            thurOpen,
+            thurClose,
+            friOpen,
+            friClose,
+            satOpen,
+            satClose 
+        } = parsedCredentials.data;
+        
+        await updateAvailability(username, sunOpen, sunClose, monOpen, monClose, tuesOpen, 
+            tuesClose, wedOpen, wedClose, thurOpen, thurClose, friOpen, friClose, satOpen, satClose);
+        return `Success! The opening hours have been updated!`;
+    }
+
+    let err = parsedCredentials as { error: ZodError };
+    let messages = err.error.errors.map((x) => x.message);
+    return messages.join(", ");
 }

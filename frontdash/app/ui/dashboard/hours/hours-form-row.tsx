@@ -2,9 +2,13 @@ import { useState } from "react";
 
 export default function HoursRow(args) {
     let day = args.day;
-    const [isOpen, setIsOpen] = useState(false);
-    const [opening, setOpening] = useState("");
-    const [closing, setClosing] = useState("");
+    let open: string = args.open;
+    let close: string = args.close;
+    let check = !(open === '' && close === '');
+
+    const [isOpen, setIsOpen] = useState(check);
+    const [opening, setOpening] = useState(open);
+    const [closing, setClosing] = useState(close);
 
     return (
         <div className="my-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">                        
@@ -16,6 +20,7 @@ export default function HoursRow(args) {
                         name={`${day}-checkbox`}
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         onChange={(event) => setIsOpen(event.target.checked)}
+                        defaultChecked={isOpen}
                     />
                     <label htmlFor={`${day}-checkbox`} className="w-full pt-4 pb-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{day}</label>
                 </div>
@@ -33,6 +38,7 @@ export default function HoursRow(args) {
                         id={`${day}Open`}
                         className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 dark:disabled:bg-gray-800 disabled:bg-gray-200 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                         onChange={(event) => setOpening(event.target.value)}
+                        defaultValue={open}
                     />
                 </div>
             </div>
@@ -49,6 +55,7 @@ export default function HoursRow(args) {
                         id={`${day}Close`}
                         className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 dark:disabled:bg-gray-800 disabled:bg-gray-200 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                         onChange={(event) => setClosing(event.target.value)}
+                        defaultValue={close}
                     />
                 </div>
             </div>
