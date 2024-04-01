@@ -13,8 +13,8 @@ export async function registerRestaurant(data: Object) : Promise<string> {
             firstName: z.string().max(20),
             lastName: z.string().max(20),
             email: z.string().email().max(35),
-            phone: z.string().regex( /\([0-9]{3}\)[0-9]{3}-[0-9]{4}/, {
-                message: 'Invalid phone number. Check formatting: (xxx)xxx-xxxx'
+            phone: z.string().regex( /[0-9]{10}/, {
+                message: 'Invalid phone number. Check formatting: xxxxxxxxxx'
             }),
             buildingNumber: z.string().max(20),
             unitNumber: z.string().max(20),

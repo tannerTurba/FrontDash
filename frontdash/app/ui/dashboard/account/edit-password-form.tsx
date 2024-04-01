@@ -10,14 +10,14 @@ import { Button } from '@/app/ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { changePassword } from '@/app/lib/actions';
   
-  export default function EditAccountForm() {
+  export default function EditPasswordForm() {
     const [errorMessage, dispatch] = useFormState(changePassword, undefined);
 
     return (
       <form action={dispatch} className="space-y-3">
         <div className="flex-1 rounded-lg bg-gray-50 dark:bg-gray-900 px-6 pb-4 pt-8">
         <h1 className={`$ mb-3 text-2xl text-gray-900 dark:text-gray-100`}>
-            Change your password
+            Update your password
           </h1>
           <div className="w-full">
             <div className="mt-4">
@@ -74,7 +74,7 @@ import { changePassword } from '@/app/lib/actions';
     const { pending } = useFormStatus();
     return (
       <Button className="mt-4 w-full" aria-disabled={pending}>
-        Submit <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50 dark:text-gray-900" />
+        Submit updated password <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50 dark:text-gray-900" />
       </Button>
     );
   }

@@ -1,4 +1,5 @@
 import { PrismaClient, Business, Food, ContactInfo, Availability } from '@prisma/client';
+import exp from 'constants';
 
 export async function insertBusinessReachedAt(businessId: string, contactId: string) {
     const prisma = new PrismaClient();
@@ -34,10 +35,11 @@ export async function insertBusiness(name: string, description: string): Promise
 
 export async function getAllRestaurants(): Promise<Business[]> {
     const prisma = new PrismaClient();
+    let results = [];
     try {
-        return await prisma.business.findMany();
-    }
-    catch (error) {
+        results = await prisma.$queryRaw`SELECT * FROM Business WHERE status = 'active'`;
+        return results;
+    } catch (error) {
         console.error('Error fetching restaurants:', error);
     }
     finally {
@@ -113,4 +115,39 @@ export async function getFoodItemsByBusiness(restaurantId: string) {
     } finally {
       await prisma.$disconnect();
     }
-  }
+}
+
+
+export async function withdraw(username: string) {
+    const prisma = new PrismaClient();
+    try {
+        await prisma.$queryRaw`UPDATE User AS u JOIN WorksFor AS w ON u.id = w.userId
+                JOIN Business AS b ON b.id = w.businessId
+            SET u.status = 'inactive',
+                b.status = 'inactive'
+            WHERE u.username = ${username}`;
+    }
+    catch (error) {
+        console.error('Error executing raw query(insertBusinessReachedAt):', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}
+
+export async function reactivate(business: string) {
+    const prisma = new PrismaClient();
+    try {
+        await prisma.$queryRaw`UPDATE User AS u JOIN WorksFor AS w ON u.id = w.userId
+                JOIN Business AS b ON b.id = w.businessId
+            SET u.status = 'active',
+                b.status = 'active'
+            WHERE b.name = ${business}`;
+    }
+    catch (error) {
+        console.error('Error executing raw query(insertBusinessReachedAt):', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}
