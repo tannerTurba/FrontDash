@@ -12,7 +12,7 @@ export async function registerEmployee(data: Object) : Promise<string> {
         .object({ 
             firstName: z.string().max(20),
             lastName: z.string().max(20),
-            phone: z.string().regex( /\([0-9]{3}\)[0-9]{3}-[0-9]{4}/, {
+            phone: z.string().regex( /[0-9]{10}/, {
                 message: 'Invalid phone number. Check formatting: xxxxxxxxxx'
             }),
             manager: z.string().min(1)

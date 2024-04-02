@@ -2,10 +2,10 @@
 
 import { ZodError, z } from 'zod';
 import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
-import { insertBusiness, insertBusinessReachedAt } from '@/scripts/business';
+import { insertBusiness, insertBusinessReachedAt, insertOpenDuring } from '@/scripts/business';
 import { insertContactInfo, emailExists } from '@/scripts/contactInfo';
 import { cookies } from 'next/headers';
-import { updateAvailability } from '@/scripts/availability';
+import { getAvailability, insertAvailability, updateAvailability } from '@/scripts/availability';
 
 export async function registerRestaurant(data: Object) : Promise<string> {
     const parsedCredentials = z
@@ -72,6 +72,11 @@ export async function registerRestaurant(data: Object) : Promise<string> {
             await insertWorksAs(user.id, 1, 'active');
             await insertWorksFor(user.id, business.id);
 
+            // Insert blank availability.
+            await insertAvailability();
+            let availability = await getAvailability(manager.username);
+            await insertOpenDuring(business.id, availability.id);
+
             return `Success! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;
         }
         let err = parsedCredentials as { error: ZodError };
@@ -129,7 +134,7 @@ export async function updateHours(data: Object) : Promise<string> {
             satOpen,
             satClose 
         } = parsedCredentials.data;
-        
+
         await updateAvailability(username, sunOpen, sunClose, monOpen, monClose, tuesOpen, 
             tuesClose, wedOpen, wedClose, thurOpen, thurClose, friOpen, friClose, satOpen, satClose);
         return `Success! The opening hours have been updated!`;

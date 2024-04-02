@@ -1,5 +1,21 @@
 import { Availability, PrismaClient } from "@prisma/client";
 
+export async function insertAvailability() : Promise<Availability> {
+    const prisma = new PrismaClient();
+    let row: Availability;
+    try {
+        row = await prisma.availability.create({ });
+        console.log(`created availability: ${row}`);
+    }
+    catch (error) {
+        console.error('Error inserting Availability data:', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+    return row;
+}
+
 export async function updateAvailability(username: string, 
     sunOpen: string, 
     sunClose: string, 

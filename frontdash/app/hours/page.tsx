@@ -5,7 +5,8 @@ import { getAvailability } from "@/scripts/availability";
 export default async function Page() {
   let username = cookies().get('username').value;
   let availability = (await getAvailability(username))[0];
-  console.log(availability);
+  console.log(username);
+  console.log(`availability:\n${availability}`);
 
     return (
       <main>
