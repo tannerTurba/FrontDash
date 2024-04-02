@@ -151,3 +151,16 @@ export async function reactivate(business: string) {
         await prisma.$disconnect();
     }
 }
+
+export async function insertOpenDuring(businessId: number, availabilityId: number) {
+    const prisma = new PrismaClient();
+    try {
+        await prisma.$queryRaw`INSERT INTO OpenDuring (availabilityId, businessId) VALUES (${availabilityId}, ${businessId})`;
+    }
+    catch (error) {
+        console.error('Error executing raw query(insertOpenDuring):', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}

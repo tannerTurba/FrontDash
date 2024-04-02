@@ -9,22 +9,22 @@ datasource db {
 
 model Availability {
   id         Int          @id @default(autoincrement())
-  sunOpen    DateTime?    @db.Time(0)
-  sunClose   DateTime?    @db.Time(0)
-  monOpen    DateTime?    @db.Time(0)
-  monClose   DateTime?    @db.Time(0)
-  tuesOpen   DateTime?    @db.Time(0)
-  tuesClose  DateTime?    @db.Time(0)
-  wedOpen    DateTime?    @db.Time(0)
-  wedClose   DateTime?    @db.Time(0)
-  thurOpen   DateTime?    @db.Time(0)
-  thurClose  DateTime?    @db.Time(0)
-  friOpen    DateTime?    @db.Time(0)
-  friClose   DateTime?    @db.Time(0)
-  satOpen    DateTime?    @db.Time(0)
-  satClose   DateTime?    @db.Time(0)
+  sunOpen    String       @default("") @db.VarChar(10)
+  sunClose   String       @default("") @db.VarChar(10)
+  monOpen    String       @default("") @db.VarChar(10)
+  monClose   String       @default("") @db.VarChar(10)
+  tuesOpen   String       @default("") @db.VarChar(10)
+  tuesClose  String       @default("") @db.VarChar(10)
+  wedOpen    String       @default("") @db.VarChar(10)
+  wedClose   String       @default("") @db.VarChar(10)
+  thurOpen   String       @default("") @db.VarChar(10)
+  thurClose  String       @default("") @db.VarChar(10)
+  friOpen    String       @default("") @db.VarChar(10)
+  friClose   String       @default("") @db.VarChar(10)
+  satOpen    String       @default("") @db.VarChar(10)
+  satClose   String       @default("") @db.VarChar(10)
   OpenDuring OpenDuring[] @ignore
-  ServedOn   ServedOn[]   @ignore
+  ServedOn   ServedOn[] @ignore
 }
 
 model Business {
@@ -33,11 +33,11 @@ model Business {
   image       Bytes?       @db.Blob
   description String?      @db.VarChar(1000)
   status      String       @default("active") @db.VarChar(10)
-  From        From[]       @ignore
-  Offers      Offers[]     @ignore
+  From        From[] @ignore
+  Offers      Offers[] @ignore
   OpenDuring  OpenDuring[] @ignore
-  ReachedAt   ReachedAt[]  @ignore
-  WorksFor    WorksFor[]   @ignore
+  ReachedAt   ReachedAt[] @ignore
+  WorksFor    WorksFor[] @ignore
 }
 
 model ContactInfo {
@@ -52,7 +52,7 @@ model ContactInfo {
   state          String?     @db.VarChar(20)
   zipCode        String?     @db.VarChar(20)
   email          String?     @unique(map: "EMAIL") @db.VarChar(35)
-  Places         Places[]    @ignore
+  Places         Places[] @ignore
   ReachedAt      ReachedAt[] @ignore
 }
 
@@ -73,7 +73,7 @@ model CreditCard {
   cardNumber     String     @id @db.VarChar(25)
   expirationDate String     @db.VarChar(10)
   securityCode   Int
-  Owns           Owns[]     @ignore
+  Owns           Owns[] @ignore
   PaidWith       PaidWith[] @ignore
 }
 
@@ -84,7 +84,7 @@ model Food {
   price    Float?     @db.Float
   stock    Int?
   Contains Contains[] @ignore
-  Offers   Offers[]   @ignore
+  Offers   Offers[] @ignore
   ServedOn ServedOn[] @ignore
 }
 
@@ -132,9 +132,9 @@ model Order {
   deliveryTime DateTime?  @db.DateTime(0)
   status       String?    @db.VarChar(20)
   Contains     Contains[] @ignore
-  From         From[]     @ignore
+  From         From[] @ignore
   PaidWith     PaidWith[] @ignore
-  Places       Places[]   @ignore
+  Places       Places[] @ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -145,7 +145,7 @@ model Owns {
   CreditCard CreditCard? @relation(fields: [cardNumber], references: [cardNumber], onDelete: NoAction, onUpdate: NoAction, map: "Owns_ibfk_2")
 
   @@index([userId], map: "userId")
-  @@index([cardNumber], map: "fk_cardNumber")
+  @@index([cardNumber], map: "Owns_ibfk_2")
   @@ignore
 }
 
@@ -158,7 +158,7 @@ model PaidWith {
   CreditCard CreditCard? @relation(fields: [cardNumber], references: [cardNumber], onDelete: NoAction, onUpdate: NoAction, map: "PaidWith_ibfk_2")
 
   @@index([orderId], map: "orderId")
-  @@index([cardNumber], map: "fk_cardNumber1")
+  @@index([cardNumber], map: "PaidWith_ibfk_2")
   @@ignore
 }
 
@@ -212,10 +212,10 @@ model User {
   username  String?     @unique(map: "username") @db.VarChar(30)
   password  String?     @db.VarChar(100)
   status    String?     @db.VarChar(20)
-  Owns      Owns[]      @ignore
+  Owns      Owns[] @ignore
   ReachedAt ReachedAt[] @ignore
-  WorksAs   WorksAs[]   @ignore
-  WorksFor  WorksFor[]  @ignore
+  WorksAs   WorksAs[] @ignore
+  WorksFor  WorksFor[] @ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

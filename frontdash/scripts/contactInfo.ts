@@ -51,7 +51,6 @@ export async function editContactInfo(
     zip: string, 
     email: string
     ): Promise<string> {
-        console.log(`------------------phoneNumber: ${phoneNumber} ------------`);
         const prisma = new PrismaClient();
         try {
             await prisma.$queryRaw`UPDATE User AS u JOIN ReachedAt AS r ON u.id = r.userId
