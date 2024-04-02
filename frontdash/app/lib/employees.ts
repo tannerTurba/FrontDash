@@ -12,7 +12,7 @@ export async function registerEmployee(data: Object) : Promise<string> {
         .object({ 
             firstName: z.string().max(20),
             lastName: z.string().max(20),
-            phone: z.string().regex( /\([0-9]{3}\)[0-9]{3}-[0-9]{4}/, {
+            phone: z.string().regex( /[0-9]{10}/, {
                 message: 'Invalid phone number. Check formatting: xxxxxxxxxx'
             }),
             manager: z.string().min(1)
@@ -45,7 +45,7 @@ export async function registerEmployee(data: Object) : Promise<string> {
             let managerData = await getUser(manager);
             console.log(`managerData = ${JSON.stringify(managerData)}---------------------------`);
             let businessId = await getWorkingFor(managerData.id);
-            console.log(`busisnessID = ${JSON.stringify(businessId)} ${typeof businessId}---------------------------`);
+            console.log(`busisnessID = ${businessId} ${typeof businessId}---------------------------`);
 
             if (businessId != '') {
                 await insertWorksFor(user.id, +businessId);
