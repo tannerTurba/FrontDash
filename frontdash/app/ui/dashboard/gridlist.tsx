@@ -9,6 +9,7 @@ export default function GridList( { cards } ) {
                     title={card.title}
                     description={card.description}
                     imageUrl={card.imageUrl}
+                    restaurantId={card.restaurantId}
                 />
             ))}
         </div>
