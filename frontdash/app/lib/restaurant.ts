@@ -73,8 +73,8 @@ export async function registerRestaurant(data: Object) : Promise<string> {
             await insertWorksFor(user.id, business.id);
 
             // Insert blank availability.
-            await insertAvailability();
-            let availability = await getAvailability(manager.username);
+            let availability = await insertAvailability();
+            console.log(availability);
             await insertOpenDuring(business.id, availability.id);
 
             return `Success! Manager username and password:\n\t${manager.username}\n\t${manager.password}`;

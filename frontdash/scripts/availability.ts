@@ -4,7 +4,7 @@ export async function insertAvailability() : Promise<Availability> {
     const prisma = new PrismaClient();
     let row: Availability;
     try {
-        row = await prisma.availability.create({ });
+        row = await prisma.availability.create({});
         console.log(`created availability: ${row}`);
     }
     catch (error) {

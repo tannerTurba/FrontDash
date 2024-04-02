@@ -45,7 +45,7 @@ export async function registerEmployee(data: Object) : Promise<string> {
             let managerData = await getUser(manager);
             console.log(`managerData = ${JSON.stringify(managerData)}---------------------------`);
             let businessId = await getWorkingFor(managerData.id);
-            console.log(`busisnessID = ${JSON.stringify(businessId)} ${typeof businessId}---------------------------`);
+            console.log(`busisnessID = ${businessId} ${typeof businessId}---------------------------`);
 
             if (businessId != '') {
                 await insertWorksFor(user.id, +businessId);
