@@ -1,7 +1,11 @@
-export default async function Page() {
-    return (
-      <main>
-        <h1>Orders</h1>
-      </main>
-    );
-  }
+import OrderList from '@/app/ui/orderScreen';
+
+function OrdersPage() {
+  return (
+    <div>
+      <OrderList />
+    </div>
+  );
+}
+
+export default OrdersPage;
