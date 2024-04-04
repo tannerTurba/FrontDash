@@ -2,55 +2,37 @@
 
 import {
   UserGroupIcon,
-  HomeIcon,
   DocumentDuplicateIcon,
   RectangleGroupIcon,
-  ClockIcon
+  ClockIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
-export default async function NavLinks(args) {
-  const pathname = usePathname();
-  let userRole = args.userRole;
+let order = { name: 'Orders', href: '/orders', icon: DocumentDuplicateIcon };
+let management = { name: 'Management', href: '/employees', icon: UserGroupIcon };
+let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
+let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
+let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon };
 
-  let links = [];
-  if (userRole == 'manager') {
-    links = [
-      { name: 'Home', href: '/dashboard', icon: HomeIcon },
-      {
-        name: 'Orders',
-        href: '/dashboard/orders',
-        icon: DocumentDuplicateIcon,
-      },
-      { name: 'Employees', href: '/dashboard/employees', icon: UserGroupIcon },
-      { name: 'Menu', href: '/dashboard/menu', icon: RectangleGroupIcon },
-      { name: 'Restaurant Hours', href: '/dashboard/hours', icon: ClockIcon }
-    ];
+function getLinks(userRole, status) {
+  if (userRole == 'manager' && status == 'active') {
+    return [order, management, menu, restaurantHours];
+  }
+  else if (userRole == 'manager' && status == 'pending') {
+    return [];
   }
   else if (userRole == 'employee') {
-    links = [
-      { name: 'Home', href: '/dashboard', icon: HomeIcon },
-      {
-        name: 'Orders',
-        href: '/dashboard/orders',
-        icon: DocumentDuplicateIcon,
-      },
-      { name: 'Menu', href: '/dashboard/menu', icon: RectangleGroupIcon },
-      { name: 'Restaurant Hours', href: '/dashboard/hours', icon: ClockIcon }
-    ];
+    return [order, menu, restaurantHours];
   }
-  else {
-    links = [
-      { name: 'Home', href: '/dashboard', icon: HomeIcon },
-      {
-        name: 'Orders',
-        href: '/dashboard/orders',
-        icon: DocumentDuplicateIcon,
-      }
-    ];
-  }
+  return [register];
+}
+
+export default async function NavLinks(args) {
+  const pathname = usePathname();
+  let links = getLinks(args.userRole, args.status);
 
   return (
     <>

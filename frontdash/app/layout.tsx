@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SideNav from '@/app/ui/dashboard/sidenav';
 
 export const metadata: Metadata = {
   title: "FrontDash",
@@ -13,7 +14,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+          <div className="w-full flex-none md:w-64">
+            <SideNav />
+          </div>
+          <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+        </div> 
+      </body>
     </html>
   );
 }

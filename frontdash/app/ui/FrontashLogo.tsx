@@ -5,8 +5,8 @@ export default function FontDashLogo() {
     <div
       className="flex items-center space-x-2"
     >
-     <IoFastFood className="h-12 w-12" /> 
-     <p className="h-12 w-12 text-[38px]">FrontDash</p>
+     <IoFastFood className="h-8 w-8" /> 
+     <p className="text-2xl">FrontDash</p>
     </div>
   );
 }
