@@ -1,7 +1,7 @@
 'use server';
 
 import { ZodError, z } from 'zod';
-import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/account'
+import { createUser, insertUserReachedAt, insertWorksAs, insertWorksFor } from '@/scripts/user'
 import { insertBusiness, insertBusinessReachedAt, insertOpenDuring } from '@/scripts/business';
 import { insertContactInfo, emailExists } from '@/scripts/contactInfo';
 import { cookies } from 'next/headers';
