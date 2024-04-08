@@ -5,7 +5,9 @@ import {
   DocumentDuplicateIcon,
   RectangleGroupIcon,
   ClockIcon,
-  PencilSquareIcon
+  PencilSquareIcon,
+  BuildingStorefrontIcon,
+  TruckIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,6 +18,8 @@ let management = { name: 'Management', href: '/employees', icon: UserGroupIcon }
 let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
 let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
 let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon };
+let restaurants = { name: 'Restaurants', href: '/restaurants', icon: BuildingStorefrontIcon };
+let drivers = { name: 'Drivers', href: '/drivers', icon: TruckIcon };
 
 function getLinks(userRole, status) {
   if (userRole == 'manager' && status == 'active') {
@@ -26,6 +30,9 @@ function getLinks(userRole, status) {
   }
   else if (userRole == 'employee') {
     return [order, menu, restaurantHours];
+  }
+  else if (userRole == 'frontdash') {
+    return [restaurants, drivers];
   }
   return [register];
 }
