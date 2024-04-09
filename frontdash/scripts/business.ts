@@ -35,7 +35,7 @@ export async function insertBusiness(name: string, description: string): Promise
     return business;
 }
 
-export async function getAllRestaurants(): Promise<Business[]> {
+export async function getAllActiveRestaurants(): Promise<Business[]> {
     const prisma = new PrismaClient();
     let results = [];
     try {
@@ -170,4 +170,24 @@ export async function insertOpenDuring(businessId: number, availabilityId: numbe
     finally {
         await prisma.$disconnect();
     }
+}
+
+export async function getAllRestaurants() {
+    const prisma = new PrismaClient();
+    let results;
+    try {
+        results = await prisma.$queryRaw`SELECT Business.id AS businessId, User.id AS userId, Business.name AS name, User.username AS manager, Business.status AS status
+            FROM Business JOIN WorksFor ON Business.id = WorksFor.businessId
+                JOIN User ON User.id = WorksFor.userId
+                JOIN WorksAs ON User.id = WorksAs.userId
+                JOIN Role ON Role.id = WorksAs.roleId
+            WHERE Role.title = 'manager'`;
+    }
+    catch (error) {
+        console.error('Error executing raw query(insertOpenDuring):', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+    return results;
 }
