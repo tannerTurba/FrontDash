@@ -1,4 +1,4 @@
-import { reactivate, withdraw } from "@/scripts/business";
+import { reactivate, withdrawById } from "@/scripts/business";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -12,20 +12,19 @@ export async function GET(
 
 export async function POST(
     req: Request,
-    { params }: { params: { managerId: string } }
+    { params }: { params: { businessId: string } }
 ) {
     const headersList = headers();
     const actionType = headersList.get('actionType');
-    const id = params.managerId;
-    console.log(`name on server side: ${id}`);
+    const id = params.businessId;
 
     let status;
-    if (actionType === 'activate') {
+    if (actionType === 'activate' || actionType === 'pending') {
         await reactivate(id);
         status = 'active';
     }
     else {
-        await withdraw(id);
+        await withdrawById(id);
         status = 'inactive';
     }
 

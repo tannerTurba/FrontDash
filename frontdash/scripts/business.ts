@@ -1,5 +1,4 @@
 import { PrismaClient, Business, Food, ContactInfo, Availability } from '@prisma/client';
-import exp from 'constants';
 
 export async function insertBusinessReachedAt(businessId: string, contactId: string) {
     const prisma = new PrismaClient();
@@ -22,7 +21,8 @@ export async function insertBusiness(name: string, description: string): Promise
             data: {
                 name: name, 
                 image: null,
-                description: description
+                description: description,
+                status: 'pending'
             }
         });
     }
@@ -124,15 +124,33 @@ export async function getFoodItemsByBusiness(restaurantId: string) {
     return menuItems as Food[];
 }
 
+export async function getBusinessId(managerUsername: string) {
+    const prisma = new PrismaClient(); 
+    let id;
+    try {
+        id = await prisma.$queryRaw`SELECT Business.id	
+            FROM Business JOIN WorksFor ON Business.id = WorksFor.businessId
+                JOIN User ON User.id = WorksFor.userId
+            WHERE User.username = ${managerUsername}`;
+    }
+    catch (error) {
+        console.error('Error executing raw query(insertBusinessReachedAt):', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+    return id[0];
+}
 
 export async function withdraw(username: string) {
-    const prisma = new PrismaClient(); 
+    let businessId = await getBusinessId(username);
+    const prisma = new PrismaClient();
     try {
-        await prisma.$queryRaw`UPDATE User AS u JOIN WorksFor AS w ON u.id = w.userId
-                JOIN Business AS b ON b.id = w.businessId
-            SET u.status = 'inactive',
-                b.status = 'inactive'
-            WHERE u.username = ${username}`;
+        await prisma.$queryRaw`UPDATE User JOIN WorksFor ON User.id = WorksFor.userId
+                JOIN Business ON Business.id = WorksFor.businessId
+            SET User.status = 'inactive',
+                Business.status = 'inactive'
+            WHERE Business.id = ${businessId}`;
     }
     catch (error) {
         console.error('Error executing raw query(insertBusinessReachedAt):', error);
@@ -142,14 +160,31 @@ export async function withdraw(username: string) {
     }
 }
 
-export async function reactivate(business: string) {
+export async function withdrawById(businessId: string) {
+    const prisma = new PrismaClient();
+    try {
+        await prisma.$queryRaw`UPDATE User AS u JOIN WorksFor AS w ON u.id = w.userId
+                JOIN Business AS b ON b.id = w.businessId
+            SET u.status = 'inactive',
+                b.status = 'inactive'
+            WHERE b.id = ${businessId}`;
+    }
+    catch (error) {
+        console.error('Error executing raw query(insertBusinessReachedAt):', error);
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}
+
+export async function reactivate(businessId: string) {
     const prisma = new PrismaClient();
     try {
         await prisma.$queryRaw`UPDATE User AS u JOIN WorksFor AS w ON u.id = w.userId
                 JOIN Business AS b ON b.id = w.businessId
             SET u.status = 'active',
                 b.status = 'active'
-            WHERE b.name = ${business}`;
+            WHERE b.id = ${businessId}`;
     }
     catch (error) {
         console.error('Error executing raw query(insertBusinessReachedAt):', error);
