@@ -129,3 +129,43 @@ export async function getContactInfo(): Promise<ContactInfo> {
     const username = cookies().get('username').value;
     return getContactData(username);
 }
+
+export async function registerDriver(data: Object) : Promise<string> {
+    const parsedCredentials = z
+        .object({ 
+            firstName: z.string().max(20),
+            lastName: z.string().max(20),
+            phone: z.string().regex( /[0-9]{10}/, {
+                message: 'Invalid phone number. Check formatting: xxxxxxxxxx'
+            })
+        })
+        .safeParse(data);
+
+        if (parsedCredentials.success) {
+            const { 
+                firstName, 
+                lastName, 
+                phone
+            } = parsedCredentials.data;
+
+            // Create new contactInfo row
+            let contactInfo = await insertContactInfo(firstName, lastName, phone, null, null, null, null, null, null,  null);
+
+            // Create new user row
+            let userData = {
+                username: `${firstName.charAt(0).toLowerCase()}${lastName.slice(0, 6).toLowerCase()}${contactInfo.id}`,
+                password: generatePassword(6),
+                status: 'active'
+            };
+            let user = await createUser(userData.username, userData.password, userData.status);
+                        
+            // Insert manager relations
+            await insertUserReachedAt(user.id.toString(), contactInfo.id.toString());
+            await insertWorksAs(user.id, 5, 'active');
+
+            return `Success! Driver username and password:\n\t${userData.username}\n\t${userData.password}`;
+        }
+        let err = parsedCredentials as { error: ZodError };
+        let messages = err.error.errors.map((x) => x.message);
+    return messages.join(", ");
+}

@@ -14,6 +14,9 @@ export default async function DriversTable() {
                     Driver name
                 </th>
                 <th scope="col" className="px-6 py-3">
+                    Phone number
+                </th>
+                <th scope="col" className="px-6 py-3">
                     Status
                 </th>
                 <th scope="col" className="px-6 py-3">

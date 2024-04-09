@@ -9,7 +9,9 @@ export default function DriversRows(args) {
         <>
             {driverData.map((driver) => {
                 let id = `${driver['id']}`;
-                let name = driver['name'];
+                let firstName = driver['fName'];
+                let lastName = driver['lName'];
+                let phoneNumber = driver['phone'];
                 const [status, setStatus] = useState(driver['status']);
 
                 const rehireDriver = async () => {
@@ -70,8 +72,11 @@ export default function DriversRows(args) {
                 return (
                     <tr key={id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {name}
+                            {`${firstName} ${lastName}`}
                         </th>
+                        <td className="px-6 py-4">
+                            {phoneNumber}
+                        </td>
                         <td className="px-6 py-4">
                             {status}
                         </td>
