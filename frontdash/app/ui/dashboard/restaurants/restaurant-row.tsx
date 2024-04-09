@@ -39,7 +39,7 @@ export default function RestaurantRows(args) {
                             setStatus("active");
                             setAction(deactivate);
                         }} 
-                        className={status === 'pending' ? "font-medium text-amber-300 dark:text-amber-400 hover:underline" : "font-medium text-green-700 dark:text-green-600 hover:underline"}
+                        className={status === 'pending' ? "font-medium text-lime-300 dark:text-lime-400 hover:underline" : "font-medium text-green-700 dark:text-green-600 hover:underline"}
                     >
                         Activate
                     </button> 
@@ -51,17 +51,21 @@ export default function RestaurantRows(args) {
                             setStatus('inactive');
                             setAction(activate);
                         }} 
-                        className="font-medium text-red-700 dark:text-red-600 hover:underline"
+                        className={status === 'pending' ? "font-medium text-orange-300 dark:text-orange-400 hover:underline" : "font-medium text-red-700 dark:text-red-600 hover:underline"}
                     >
                         Deactivate
-                    </button> );
+                    </button> 
+                );
                 
                 const getButton = (status) => {
                     if (status === 'active') {
                         return deactivate;
                     }
-                    else {
+                    else if (status == 'inactive') {
                         return activate;
+                    }
+                    else {
+                        return (<> {activate} {deactivate} </>);
                     }
                 }
                 
