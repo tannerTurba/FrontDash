@@ -34,6 +34,9 @@ function getLinks(userRole, status) {
   else if (userRole == 'frontdash') {
     return [restaurants, drivers];
   }
+  else if (userRole == 'driver') {
+    return [];
+  }
   return [register];
 }
 

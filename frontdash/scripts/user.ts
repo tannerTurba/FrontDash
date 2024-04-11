@@ -96,15 +96,31 @@ export async function getEmployees(managerBusinessId: string): Promise<User[]> {
   return users as User[];
 }
 
-// currently not working
-export async function updateUserStatus(id: number, status: string) {
+export async function updateUserStatus(id: number | string, status: string) {
   const prisma = new PrismaClient();
   try {
-      await prisma.$executeRaw`UPDATE User SET status = &{status} WHERE id = ${id};`;
-         
+    await prisma.$executeRaw`UPDATE User SET status = ${status} WHERE id = ${id};`;
   } catch (error) {
-      console.error('Error updating User status:', error);
+    console.error('Error updating User status:', error);
   } finally {
-      await prisma.$disconnect();
+    await prisma.$disconnect();
   }
+}
+
+export async function getAllDrivers() {
+  const prisma = new PrismaClient();
+  let users;
+  try {
+      users = await prisma.$queryRaw`SELECT User.id AS id, ContactInfo.firstName AS fName, ContactInfo.lastName AS lName, ContactInfo.phoneNumber AS phone, User.status AS status
+        FROM User JOIN WorksAs ON User.id = WorksAs.userId
+          JOIN Role ON Role.id = WorksAs.roleId
+          JOIN ReachedAt ON User.id = ReachedAt.userId
+          JOIN ContactInfo ON ContactInfo.id = ReachedAt.contactId
+        WHERE Role.title = 'driver'`;
+  } catch (error) {
+    console.error('Error fetching Drivers:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return users as User[];
 }
