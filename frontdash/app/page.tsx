@@ -10,11 +10,11 @@
 // } from '@/app/ui/skeletons';
 
 import GridList from '@/app/ui/dashboard/gridlist';
-import { getAllRestaurants } from '@/scripts/business';
+import { getAllActiveRestaurants } from '@/scripts/business';
 
 export default async function Page() {
   try {
-    const restaurants = await getAllRestaurants();
+    const restaurants = await getAllActiveRestaurants();
 
     return (
       <main>
