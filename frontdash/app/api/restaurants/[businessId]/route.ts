@@ -1,13 +1,33 @@
 import { reactivate, withdrawById } from "@/scripts/business";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { getRestaurantById, getAvailabilityByBusiness, getContactInfoByBusiness, getFoodItemsByBusiness } from "@/scripts/business";
 
 export async function GET(
-    req: Request,
-    { params }: { params: { restaurantName: string } }
+    req: Request
 ) {
-    console.log('HITTING API');
-    return NextResponse.json({ msg: `Hello, ${params.restaurantName}, from server` });
+    try {
+        const headersList = headers();
+        const restaurantId = headersList.get('id');
+
+        const [menuItems, restaurant, availability, contactInfo] = await Promise.all([
+            getFoodItemsByBusiness(restaurantId),
+            getRestaurantById(parseInt(restaurantId, 10)),
+            getAvailabilityByBusiness(parseInt(restaurantId, 10)),
+            getContactInfoByBusiness(parseInt(restaurantId, 10))
+        ]);
+
+        const restaurantData = {
+            menuItems,
+            restaurant,
+            availability,
+            contactInfo
+        };
+
+        return NextResponse.json(restaurantData);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 export async function POST(

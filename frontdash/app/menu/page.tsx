@@ -1,25 +1,29 @@
-import { getFoodItemsByBusiness, getAvailabilityByBusiness, getContactInfoByBusiness, getRestaurantById } from '@/scripts/business';
+'use client';
+
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useSearchParams } from 'next/navigation';
 
 export default async function Page() {
-  const restaurantId = '53';
+  const searchParams = useSearchParams();
+  const restaurantId = searchParams.get('id');
+
   try {
-    const [menuItems, restaurant, availability, contactInfo] = await Promise.all([
-      getFoodItemsByBusiness(restaurantId),
-      getRestaurantById(parseInt(restaurantId, 10)),
-      getAvailabilityByBusiness(parseInt(restaurantId, 10)),
-      getContactInfoByBusiness(parseInt(restaurantId, 10))
-    ]);
-    const contact = contactInfo[0];
-    const hours = availability[0];
+    const res = await fetch(`http://localhost:3000/api/restaurants/${restaurantId}`, {
+      method: 'GET',
+      headers: { id: restaurantId }
+    });
+    const restaurantInfo = await res.json();
+
+    const contact = restaurantInfo.contactInfo[0];
+    const hours = restaurantInfo.availability[0];
 
     return (
       <main>
         <div className="container mx-auto py-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold">{restaurant?.name}</h1>
-              <p className="text-gray-600">{restaurant?.description}</p>
+              <h1 className="text-3xl font-bold">{restaurantInfo.restaurant?.name}</h1>
+              <p className="text-gray-600">{restaurantInfo.restaurant?.description}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -42,7 +46,7 @@ export default async function Page() {
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-2">Menu</h2>
                 <div className="bg-white rounded-lg shadow-md p-4">
-                  {menuItems.map((item, index) => (
+                  {restaurantInfo.menuItems.map((item, index) => (
                     <div key={index} className="relative flex justify-between items-center bg-gray-200 mb-2 p-2 rounded-lg hover:bg-sky-100 hover:text-blue-600 dark:hover:bg-sky-900 dark:hover:text-blue-400">
                       <div>
                         <p className="text-gray-700 dark:text-gray-300">{item.name}</p>
@@ -75,7 +79,7 @@ export default async function Page() {
         </div>
       </main>
     );
-  } catch (error) {
+   } catch (error) {
     console.error('Error fetching data:', error);
     return (
       <main>
