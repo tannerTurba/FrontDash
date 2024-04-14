@@ -2,10 +2,12 @@
 
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { useSearchParams } from 'next/navigation';
+import { useState, useRef } from 'react';
 
 export default async function Page() {
   const searchParams = useSearchParams();
   const restaurantId = searchParams.get('id');
+  const value = searchParams.get('bool');
 
   try {
     const res = await fetch(`http://localhost:3000/api/restaurants/${restaurantId}`, {
@@ -46,23 +48,12 @@ export default async function Page() {
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-2">Menu</h2>
                 <div className="bg-white rounded-lg shadow-md p-4">
-                  {restaurantInfo.menuItems.map((item, index) => (
-                    <div key={index} className="relative flex justify-between items-center bg-gray-200 mb-2 p-2 rounded-lg hover:bg-sky-100 hover:text-blue-600 dark:hover:bg-sky-900 dark:hover:text-blue-400">
-                      <div>
-                        <p className="text-gray-700 dark:text-gray-300">{item.name}</p>
-                        <p className="text-gray-700 dark:text-gray-300">${item.price.toFixed(2)}</p>
-                        <p className="text-gray-700 dark:text-gray-300">Available: {item.stock}</p>
-                      </div>
-                      <div className="flex items-center justify-end">
-                        <button className="flex-shrink-0 bg-red-500 hover:bg-red-700 text-white font-bold rounded-full flex items-center justify-center w-8 h-8 text-lg mr-2">
-                          -
-                        </button>
-                        <div className="text-lg mr-2">0</div>
-                        <button className="flex-shrink-0 bg-red-500 hover:bg-red-700 text-white font-bold rounded-full flex items-center justify-center w-8 h-8 text-lg mr-5">
-                          +
-                        </button>
-                      </div>
-                  </div>
+                {restaurantInfo.menuItems.map((item, index) => (
+                  value ? (
+                    <ModifiableMenuItem key={index} item={item} />
+                  ) : (
+                    <MenuItem key={index} item={item} />
+                  )
                 ))}
               </div>
             </div>
@@ -94,6 +85,56 @@ export default async function Page() {
 }
 
 function MenuItem({ item }) {
+  const [quantity, setQuantity] = useState(0);
+  const inputRef = useRef(null);
+
+  const incrementQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    if (value === "" || (Number.isInteger(parseInt(value)) && parseInt(value) >= 0)) {
+      setQuantity(value === "" ? 0 : parseInt(value));
+      inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
+    }
+  };
+
+  return (
+    <div className="relative flex justify-between items-center bg-gray-200 mb-2 p-2 rounded-lg hover:bg-sky-100 hover:text-blue-600 dark:hover:bg-sky-900 dark:hover:text-blue-400">
+      <div>
+        <p className="text-gray-700 dark:text-gray-300">{item.name}</p>
+        <p className="text-gray-700 dark:text-gray-300">${item.price.toFixed(2)}</p>
+        <p className="text-gray-700 dark:text-gray-300">Available: {item.stock}</p>
+      </div>
+      <div className="flex items-center justify-end">
+        <button className="flex-shrink-0 bg-red-500 hover:bg-red-700 text-white font-bold rounded-full flex items-center justify-center w-8 h-8 text-lg mr-2"
+        onClick={decrementQuantity}>
+          -
+        </button>
+        <input
+          className="text-lg mr-2 w-8 text-center"
+          type="text"
+          value={quantity}
+          onChange={handleChange}
+          ref={inputRef}
+        />
+        <button className="flex-shrink-0 bg-red-500 hover:bg-red-700 text-white font-bold rounded-full flex items-center justify-center w-8 h-8 text-lg mr-5"
+        onClick={incrementQuantity}>
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ModifiableMenuItem({ item }) {
   const [quantity, setQuantity] = useState(0);
   const inputRef = useRef(null);
 
