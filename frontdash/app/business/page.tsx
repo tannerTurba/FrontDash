@@ -3,6 +3,7 @@
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { useSearchParams } from 'next/navigation';
 import { useState, useRef } from 'react';
+import Link from 'next/link';
 
 export default async function Page() {
   const searchParams = useSearchParams();
@@ -14,9 +15,35 @@ export default async function Page() {
       headers: { id: restaurantId }
     });
     const restaurantInfo = await res.json();
-
+    
     const contact = restaurantInfo.contactInfo[0];
     const hours = restaurantInfo.availability[0];
+
+    let cart = [];
+    const updateCart = (item, newValue) => {
+      const index = cart.findIndex(cartItem => cartItem.id === item.id);
+      console.log(index);
+      if (index !== -1) {
+        if (newValue === 0) {
+          cart.splice(index, 1);
+        } else {
+          cart[index].value = newValue;
+        }
+      } else {
+        if (newValue !== 0) {
+          cart.push({ item: item.name, id: item.id, value: newValue, price: item.price.toFixed(2) });
+        }
+      }
+      console.log(cart);
+    };
+
+    const handleClick = () => {
+      if (cart.length === 0) {
+        alert("Cart is empty!");
+      } else {
+        window.location.href = `/breakdown?order=${encodeURIComponent(JSON.stringify(cart))}`;
+      }
+    }
 
     return (
       <main>
@@ -48,20 +75,18 @@ export default async function Page() {
               <h2 className="text-xl font-semibold mb-2">Menu</h2>
                 <div className="bg-white rounded-lg shadow-md p-4">
                 {restaurantInfo.menuItems.map((item, index) => (
-                    <MenuItem key={index} item={item} />
+                    <MenuItem key={index} item={item} editCart={updateCart}/>
                 ))}
               </div>
             </div>
           </div>
         </div>
         <div className="fixed bottom-4 right-4">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
-            <ShoppingCartIcon className="h-6 w-6 mr-2" />
-            Shopping Cart
-            <div className="absolute top-0 right-0 bg-red-500 rounded-full h-6 w-6 flex items-center justify-center text-white text-xs -mt-2 -mr-2">
-              5
-            </div>
-          </button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
+            onClick={handleClick}>
+              <ShoppingCartIcon className="h-6 w-6 mr-2" />
+              Shopping Cart
+            </button>
         </div>
       </main>
     );
@@ -79,25 +104,45 @@ export default async function Page() {
   }
 }
 
-function MenuItem({ item }) {
-  const [quantity, setQuantity] = useState(0);
+function MenuItem({ item, editCart }) {
+  const [quantity, updateQuantity] = useState(0);
   const inputRef = useRef(null);
+  const [warning, setWarning] = useState(null);
 
   const incrementQuantity = () => {
-    setQuantity(quantity + 1);
+    if (quantity < item.stock) {
+      editCart(item, quantity + 1);
+      updateQuantity(quantity + 1);
+      setWarning("");
+    } else {
+      setWarning("Quantity cannot exceed available stock");
+    }
   };
 
   const decrementQuantity = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1);
+      editCart(item, quantity - 1);
+      updateQuantity(quantity - 1);
+      setWarning("");
+    } else {
+      setWarning("Quantity has to be positive");
     }
   };
 
   const handleChange = (e) => {
     const value = e.target.value;
     if (value === "" || (Number.isInteger(parseInt(value)) && parseInt(value) >= 0)) {
-      setQuantity(value === "" ? 0 : parseInt(value));
-      inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
+      const newValue = value === "" ? 0 : parseInt(value);
+      if (newValue <= item.stock) {
+        editCart(item, newValue);
+        updateQuantity(newValue);
+        setWarning("");
+        inputRef.current.style.width = `${inputRef.current.scrollWidth}px`;
+      } else {
+        editCart(item, item.stock);
+        updateQuantity(item.stock);
+        setWarning("Quantity cannot exceed available stock");
+      }
     }
   };
 
@@ -125,6 +170,7 @@ function MenuItem({ item }) {
           +
         </button>
       </div>
+      {warning && <p className="absolute bottom-0 right-0 text-red-600 text-s">{warning}</p>}
     </div>
   );
 }
