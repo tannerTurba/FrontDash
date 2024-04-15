@@ -1,4 +1,4 @@
-import { PrismaClient, Business, Food, ContactInfo, Availability } from '@prisma/client';
+import { PrismaClient, Business, Food, ContactInfo, Availability, Order } from '@prisma/client';
 
 export async function insertBusinessReachedAt(businessId: string, contactId: string) {
     const prisma = new PrismaClient();
@@ -225,4 +225,21 @@ export async function getAllRestaurants() {
         await prisma.$disconnect();
     }
     return results;
+}
+
+export async function getOrders(managerBusinessId: string): Promise<Order[]> {
+    const prisma = new PrismaClient();
+    try {
+        return await prisma.$queryRaw`SELECT \`Order\`.*
+        FROM \`Order\`
+        JOIN \`From\` ON \`Order\`.id = \`From\`.orderId
+        JOIN Business ON \`From\`.businessId = Business.id
+        WHERE Business.id = ${managerBusinessId}`;
+    }
+     catch (error) {
+        console.error('Error fetching Orders:', error);
+        return [];
+    } finally {
+        await prisma.$disconnect();
+    }
 }
