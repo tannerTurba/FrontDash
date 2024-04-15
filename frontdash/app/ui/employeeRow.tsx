@@ -7,9 +7,7 @@ import { cookies } from 'next/headers';
 export default async function EmployeeRow() {
   // add getuserdata once fixed
   let username = cookies().get('username').value;
-  console.log(username);
   const businessId = await getBusinessId(username);
-  console.log(businessId);
   const users = await getEmployees(businessId.id);
 
   
