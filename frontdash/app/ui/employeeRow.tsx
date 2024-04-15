@@ -1,9 +1,17 @@
+
 import { getEmployees, updateUserStatus } from '@/scripts/user';
+import { getBusinessId } from '@/scripts/business';
+
+import { cookies } from 'next/headers';
 
 export default async function EmployeeRow() {
   // add getuserdata once fixed
-  const businessId = '54';
-  const users = await getEmployees(businessId);
+  let username = cookies().get('username').value;
+  console.log(username);
+  const businessId = await getBusinessId(username);
+  console.log(businessId);
+  const users = await getEmployees(businessId.id);
+
   
   return (
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
