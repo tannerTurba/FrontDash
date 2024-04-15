@@ -47,8 +47,9 @@ export default function Page() {
             </div>
             <div className="flex flex-col mt-5">
                 <p className="text-right">Subtotal: ${rawTotal.toFixed(2)}</p>
+                <p className="text-right">Service Charge: ${(rawTotal * .06).toFixed(2)}</p>
                 <p className="text-right">Tip Amount: ${tipAmount}</p>
-                <p className="text-right">Total: ${(parseFloat(tipAmount) + rawTotal).toFixed(2)}</p>
+                <p className="text-right">Total: ${(parseFloat(tipAmount) + rawTotal + (rawTotal * .06)).toFixed(2)}</p>
             </div>
           </div>
           <div className="mt-4 flex justify-end">
