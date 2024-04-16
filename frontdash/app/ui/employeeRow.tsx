@@ -1,34 +1,46 @@
+
 import { getEmployees, updateUserStatus } from '@/scripts/user';
+import { getBusinessId } from '@/scripts/business';
+
+import { cookies } from 'next/headers';
 
 export default async function EmployeeRow() {
   // add getuserdata once fixed
-  const businessId = '54';
-  const users = await getEmployees(businessId);
+  let username = cookies().get('username').value;
+  const businessId = await getBusinessId(username);
+  const users = await getEmployees(businessId.id);
+
   
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" >
+      <tr>
+        <th className="px-6 py-3">Username</th>
+        <th className="px-6 py-3">ID</th>
+        <th className="px-6 py-3">Status</th>
+        <th className="px-6 py-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
       {users.map((employee) => (
-        <div key={employee.username} className="grow rounded-lg bg-gray-50 p-3 hover:bg-sky-100 md:flex-none md:justify-start md:p-2 md:px-3 dark:bg-gray-900 dark:hover:bg-sky-900">
-          <div className="grid justify-items-center text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400">
-            <h2 className="text-lg font-bold">Username</h2>
-            <div>{employee.username}</div>
-            <h2 className="text-lg font-bold">ID</h2>
-            <div>{employee.id}</div>
-            <h2 className="text-lg font-bold">Status</h2>
-            <div className={employee.status === "active" ? "text-green-500" : "text-red-500"}>
-              {employee.status}
-            </div>
-            <div className="mt-4">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={async () => {
+        <tr key={employee.username} className="bg-gray-50 hover:bg-sky-100 dark:bg-gray-900 dark:hover:bg-sky-900">
+          <td className="border px-4 py-2">{employee.username}</td>
+          <td className="border px-4 py-2">{employee.id}</td>
+          <td className={`border px-4 py-2 ${employee.status === "active" ? "text-green-500" : "text-red-500"}`}>
+            {employee.status}
+          </td>
+          <td className="border px-4 py-2">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={async () => {
                 "use server"
                 updateUserStatus(employee.id, employee.status);
               }}>
                 Change Status
               </button>
-            </div>
-          </div>
-        </div>
+          </td>
+        </tr>
       ))}
-    </div>
+    </tbody>
+  </table>
+  
   );
 }
