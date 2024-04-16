@@ -36,8 +36,10 @@ export const authConfig = {
       const isOnLogIn = nextUrl.pathname.startsWith('/login');
       const isOnRegistration = nextUrl.pathname.startsWith('/registration');
       const isOnMenu = nextUrl.pathname.endsWith('/menu');
+      const isOnBusiness = nextUrl.pathname.includes('business');
+      const isOnCart = nextUrl.pathname.includes('breakdown');
 
-      if (!isOnDashboard && !isOnLogIn && !isOnRegistration && !isOnMenu) {
+      if (!isOnDashboard && !isOnLogIn && !isOnRegistration && !isOnMenu && !isOnBusiness && !isOnCart) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn && isOnLogIn) {
