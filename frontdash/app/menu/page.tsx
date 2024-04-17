@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { getFoodItemsByBusiness, getBusinessId } from "@/scripts/business";
+import Link from "next/link";
 
 export default async function Page() {
   try {
@@ -40,9 +41,11 @@ function ModifiableMenuItem({ item }) {
           <p className="text-gray-700 dark:text-gray-300">Available: {item.stock}</p>
         </div>
         <div className="flex items-center justify-end">
-        <button className="bg-red-500 hover:bg-red-700 text-white font-bold flex rounded mr-5 items-center justify-center w-auto h-12 px-4 text-sm">
-            Modify Item
-        </button>
+          <Link href={`/food?id=${item.id}&name=${item.name}&price=${item.price}&stock=${item.stock}`}>
+            <button className="bg-red-500 hover:bg-red-700 text-white font-bold flex rounded mr-5 items-center justify-center w-auto h-12 px-4 text-sm">
+              Modify Item
+            </button>
+          </Link>
         </div>
       </div>
     );
