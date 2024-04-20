@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { getFoodItem, insertFoodItem, editFoodItem } from "@/scripts/food";
+import { getFoodItem, insertFoodItem, editFoodItem, removeFoodItem } from "@/scripts/food";
 
 export async function GET(
     req: Request
@@ -14,6 +14,21 @@ export async function GET(
         return NextResponse.json(food);
     } catch (error) {
         console.error('Error:', error);
+    }
+}
+
+export async function DELETE(
+    req: Request
+) {
+    try {
+        const headersList = headers();
+        const foodId = headersList.get('id');
+
+        const foodData = await removeFoodItem(parseInt(foodId));
+        return NextResponse.json(foodData);
+    }
+    catch (error) {
+        console.error('Error: ', error);
     }
 }
 

@@ -6,10 +6,11 @@ import { useState } from "react";
 import {
     ExclamationCircleIcon,
     CheckCircleIcon
-  } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+} from '@heroicons/react/24/outline';
 
-export default async function Page() {
+export default function Page() {
+    const [errorStatus, updateError] = useState(null);
+
     const searchParams = useSearchParams();
     const foodId = searchParams.get('id');
     const foodName = searchParams.get('name');
@@ -17,32 +18,32 @@ export default async function Page() {
     const foodStock = searchParams.get('stock');
     const price = parseFloat(foodPrice).toFixed(2);
 
-//   function ErrorMessage(message) {
-//     if (message.includes('Success')) {
-//         return (
-//             <>
-//                 <CheckCircleIcon className='h-5 w-5 text-green-500' />
-//                 <p className='text-sm text-green-500'>{message}</p>
-//             </>
-//         );
-//     }
-//     else {
-//         return (
-//             <>
-//                 <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-//                 <p className='text-sm text-red-500'>{message}</p>
-//             </>
-//         );
-//     }
-// }
-
     try {
-        const updateFood = () => {
+        const updateFood = async () => {
+            const updatedNameInput = document.getElementById('name') as HTMLInputElement;
+            const updatedName = updatedNameInput ? updatedNameInput.value : '';
+            const updatedPriceInput = document.getElementById('price') as HTMLInputElement;
+            const updatedPrice = updatedPriceInput ? updatedPriceInput.value : '';
+            const updatedStockInput = document.getElementById('stock') as HTMLInputElement;
+            const updatedStock = updatedStockInput ? updatedStockInput.value : '';
 
+            const res = await fetch(`http://localhost:3000/api/food`, {
+            method: 'POST',
+            headers: { id: foodId, name: updatedName, price: updatedPrice, stock: updatedStock }
+            });
+            const foodStatus = await res.json();
+
+            updateError(foodStatus);
         }
 
-        const removeFood = () => {
-
+        const removeFood = async () => {
+            const res = await fetch(`http://localhost:3000/api/food`, {
+                method: 'DELETE',
+                headers: { id: foodId }
+                });
+                const foodStatus = await res.json();
+    
+                updateError(foodStatus);
         }
 
         return (
@@ -54,6 +55,9 @@ export default async function Page() {
                         <Price foodPrice={price}/>
                         <Stock foodStock={foodStock}/>
                     </form>
+                </div>
+                <div className="flex items-end space-x-1" aria-live='polite' aria-atomic='true'>
+                    {errorStatus && <ErrorMessage message={errorStatus}/>}
                 </div>
                 <div className="flex justify-end mr-5">
                     <div className="flex items-center">
@@ -82,7 +86,26 @@ export default async function Page() {
                     </div>
                 </div>
             </main>
-    );
+        );
+    }
+}
+
+function ErrorMessage({message}) {
+    if (message.includes('Success')) {
+        return (
+            <>
+                <CheckCircleIcon className='h-5 w-5 text-green-500' />
+                <p className='text-sm text-green-500'>{message}</p>
+            </>
+        );
+    }
+    else {
+        return (
+            <>
+                <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
+                <p className='text-sm text-red-500'>{message}</p>
+            </>
+        );
     }
 }
 
