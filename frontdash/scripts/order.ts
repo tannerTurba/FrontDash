@@ -16,13 +16,19 @@ export async function getOpenOrders() {
     return orders;
 }
 
-export async function assignDriver(orderId, driverId) {
+export async function assignDriver(orderId, driverId, deliveryTime) {
     const prisma = new PrismaClient();
     let orders;
     try {
-        orders = await prisma.$queryRaw`UPDATE \`Order\`
-            SET driverId = ${driverId}, status = 'waiting'
-            WHERE id = ${orderId}`;
+        orders = await prisma.order.update({
+            where: {
+                id: orderId
+            },
+            data: {
+                driverId: driverId,
+                deliveryTime: deliveryTime
+            }
+        });
     } catch (error) {
         console.error('Error assigning drivers:', error);
     } finally {

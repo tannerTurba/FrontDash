@@ -6,10 +6,6 @@ import { useState } from "react";
 export default function QueueRows(args) {
     let orderData = args.data;
     let drivers = args.drivers;
-    // let drivers = fetch(`http://localhost:3000/api/orders/${id}`, {
-    //     method: 'POST',
-    //     headers: { driverId: selectedDriver }
-    // });
 
     return (
         <>

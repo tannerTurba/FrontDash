@@ -72,7 +72,7 @@ model Contains {
 model CreditCard {
   cardNumber     String     @id @db.VarChar(25)
   expirationDate String     @db.VarChar(10)
-  securityCode   Int
+  securityCode   Int        @db.Int
   Owns           Owns[] @ignore
   PaidWith       PaidWith[] @ignore
 }
@@ -82,7 +82,7 @@ model Food {
   name     String?    @db.VarChar(40)
   image    Bytes?     @db.Blob
   price    Float?     @db.Float
-  stock    Int?
+  stock    Int?       @db.Int
   Contains Contains[] @ignore
   Offers   Offers[] @ignore
   ServedOn ServedOn[] @ignore
@@ -131,6 +131,7 @@ model Order {
   tips         Float?     @db.Float
   deliveryTime DateTime?  @db.DateTime(0)
   status       String?    @db.VarChar(20)
+  driverId     Int        @default(-1)
   Contains     Contains[] @ignore
   From         From[] @ignore
   PaidWith     PaidWith[] @ignore
@@ -212,7 +213,7 @@ model User {
   username  String?     @unique(map: "username") @db.VarChar(30)
   password  String?     @db.VarChar(100)
   status    String?     @db.VarChar(20)
-  Owns      Owns[] @ignore
+  Owns      Owns[]      @ignore
   ReachedAt ReachedAt[] @ignore
   WorksAs   WorksAs[] @ignore
   WorksFor  WorksFor[] @ignore
