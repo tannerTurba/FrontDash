@@ -5,7 +5,6 @@ import FdRows from "./fdRow";
 
 export default async function FdTable() {
     const users = await getFrontdashEmployees();
-    console.log(users);
 
     return (
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

@@ -13,6 +13,5 @@ export async function getFrontdashEmployees() {
     } finally {
         await prisma.$disconnect();
     }
-    console.log(`from db: ${employees}`);
     return employees;
 }

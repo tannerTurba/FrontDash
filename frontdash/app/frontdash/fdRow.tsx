@@ -5,7 +5,6 @@ import { useState } from "react";
 
 export default function FdRows(args) {
     let users = args.data as User[];
-    console.log(`users: ${users}`);
 
     return (
         <>
