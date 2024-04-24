@@ -9,6 +9,7 @@ export default function DriversRows(args) {
         <>
             {driverData.map((driver) => {
                 let id = `${driver['id']}`;
+                let username = driver['username'];
                 let firstName = driver['fName'];
                 let lastName = driver['lName'];
                 let phoneNumber = driver['phone'];
@@ -74,6 +75,9 @@ export default function DriversRows(args) {
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {`${firstName} ${lastName}`}
                         </th>
+                        <td className="px-6 py-4">
+                            {username}
+                        </td>
                         <td className="px-6 py-4">
                             {phoneNumber}
                         </td>

@@ -111,7 +111,7 @@ export async function getAllDrivers() {
   const prisma = new PrismaClient();
   let users;
   try {
-      users = await prisma.$queryRaw`SELECT User.id AS id, ContactInfo.firstName AS fName, ContactInfo.lastName AS lName, ContactInfo.phoneNumber AS phone, User.status AS status
+      users = await prisma.$queryRaw`SELECT User.id AS id, ContactInfo.firstName AS fName, ContactInfo.lastName AS lName, ContactInfo.phoneNumber AS phone, User.status AS status, User.username
         FROM User JOIN WorksAs ON User.id = WorksAs.userId
           JOIN Role ON Role.id = WorksAs.roleId
           JOIN ReachedAt ON User.id = ReachedAt.userId
