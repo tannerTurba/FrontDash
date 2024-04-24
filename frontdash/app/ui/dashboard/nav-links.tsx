@@ -14,6 +14,7 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 let order = { name: 'Orders', href: '/orders', icon: DocumentDuplicateIcon };
+let orderQueue = { name: 'Orders', href: '/orderQueue', icon: DocumentDuplicateIcon };
 let management = { name: 'Management', href: '/employees', icon: UserGroupIcon };
 let menu = { name: 'Menu', href: '/menu', icon: RectangleGroupIcon };
 let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIcon };
@@ -32,7 +33,7 @@ function getLinks(userRole, status) {
     return [order, menu, restaurantHours];
   }
   else if (userRole == 'frontdash') {
-    return [restaurants, drivers];
+    return [restaurants, drivers, orderQueue];
   }
   else if (userRole == 'driver') {
     return [];

@@ -124,3 +124,22 @@ export async function getAllDrivers() {
   }
   return users as User[];
 }
+
+export async function getAllActiveDrivers() {
+  const prisma = new PrismaClient();
+  let users;
+  try {
+      users = await prisma.$queryRaw`SELECT User.id AS id, ContactInfo.firstName AS fName, ContactInfo.lastName AS lName
+        FROM User JOIN WorksAs ON User.id = WorksAs.userId
+          JOIN Role ON Role.id = WorksAs.roleId
+          JOIN ReachedAt ON User.id = ReachedAt.userId
+          JOIN ContactInfo ON ContactInfo.id = ReachedAt.contactId
+        WHERE Role.title = 'driver' 
+          AND User.status = 'active'`;
+  } catch (error) {
+    console.error('Error fetching Drivers:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return users as User[];
+}
