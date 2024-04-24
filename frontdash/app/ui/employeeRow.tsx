@@ -10,7 +10,6 @@ export default async function EmployeeRow() {
   const businessId = await getBusinessId(username);
   const users = await getEmployees(businessId.id);
 
-  
   return (
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" >
@@ -30,12 +29,12 @@ export default async function EmployeeRow() {
             {employee.status}
           </td>
           <td className="border px-4 py-2">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={async () => {
-                "use server"
-                updateUserStatus(employee.id, employee.status);
-              }}>
-                Change Status
-              </button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={async () => {
+              "use server"
+              updateUserStatus(employee.id, employee.status);
+            }}>
+              Change Status
+            </button>
           </td>
         </tr>
       ))}

@@ -21,6 +21,7 @@ let restaurantHours = { name: 'Restaurant Hours', href: '/hours', icon: ClockIco
 let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon };
 let restaurants = { name: 'Restaurants', href: '/restaurants', icon: BuildingStorefrontIcon };
 let drivers = { name: 'Drivers', href: '/drivers', icon: TruckIcon };
+let frontdash = { name: 'Frontdash', href: '/frontdash', icon: UserGroupIcon };
 
 function getLinks(userRole, status) {
   if (userRole == 'manager' && status == 'active') {
@@ -37,6 +38,9 @@ function getLinks(userRole, status) {
   }
   else if (userRole == 'driver') {
     return [];
+  }
+  else if (userRole == 'admin') {
+    return [frontdash, restaurants, drivers, orderQueue];
   }
   return [register];
 }
