@@ -42,39 +42,33 @@ export async function editFoodItem(
 }
 
 export async function insertFoodItem(
-    id:number,
     name:string,
     price:number,
-    stock:number
-    ): Promise<Food> {
+    stock:number,
+    resId:number
+    ): Promise<string> {
     const prisma = new PrismaClient();
     try {
-        return await prisma.food.create({
-            data: {
-                id: id,
-                name: name,
-                price: price,
-                stock: stock
-            }
-        });
+        await prisma.$queryRaw`INSERT INTO Food (name, price, stock) VALUES (${name}, ${price}, ${stock})`
+        const result = await prisma.$queryRaw`SELECT LAST_INSERT_ID() as id`;
+        const newId = Number(result[0]?.id);
+        await prisma.$queryRaw`INSERT INTO Offers (businessId, foodId) VALUES (${resId}, ${newId})`
     }
     catch (error) {
-        console.error('Error inserting Food data:', error);
+        console.error('Error creating Food item:', error);
     }
     finally {
         await prisma.$disconnect();
     }
-    return null;
+    return "Success: Created Food Item!";
 }
 
 export async function removeFoodItem(id: number): Promise<string> {
     const prisma = new PrismaClient();
     try {
-        await prisma.food.delete({
-            where: {
-                id: id
-            }
-        });
+        await prisma.$queryRaw`UPDATE Offers
+        SET businessId = null
+        WHERE foodId = ${id};`;
     }
     catch (error) {
         console.error('Error removing Food item:', error);

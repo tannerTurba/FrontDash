@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { getFoodItem, insertFoodItem, editFoodItem, removeFoodItem } from "@/scripts/food";
+import { getFoodItem, editFoodItem, removeFoodItem } from "@/scripts/food";
 
 export async function GET(
     req: Request

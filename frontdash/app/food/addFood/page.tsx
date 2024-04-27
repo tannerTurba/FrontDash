@@ -1,75 +1,61 @@
 'use client';
 
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import {
     ExclamationCircleIcon,
     CheckCircleIcon
 } from '@heroicons/react/24/outline';
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
     const [errorStatus, updateError] = useState(null);
 
     const searchParams = useSearchParams();
-    const foodId = searchParams.get('id');
-    const foodName = searchParams.get('name');
-    const foodPrice = searchParams.get('price');
-    const foodStock = searchParams.get('stock');
-    const price = parseFloat(foodPrice).toFixed(2);
+    const restaurantId = searchParams.get('id');
 
     try {
-        const updateFood = async () => {
-            const updatedNameInput = document.getElementById('name') as HTMLInputElement;
-            const updatedName = updatedNameInput ? updatedNameInput.value : '';
-            const updatedPriceInput = document.getElementById('price') as HTMLInputElement;
-            const updatedPrice = updatedPriceInput ? updatedPriceInput.value : '';
-            const updatedStockInput = document.getElementById('stock') as HTMLInputElement;
-            const updatedStock = updatedStockInput ? updatedStockInput.value : '';
+        const createFood = async () => {
+            const documentName = document.getElementById('name') as HTMLInputElement;
+            const name = documentName ? documentName.value : '';
+            const documentPrice = document.getElementById('price') as HTMLInputElement;
+            const price = documentPrice ? documentPrice.value : '';
+            const documentStock = document.getElementById('stock') as HTMLInputElement;
+            const stock = documentStock ? documentStock.value : '';
 
-            const res = await fetch(`http://localhost:3000/api/food`, {
+            if (!documentName.value || !documentPrice.value || !documentStock.value) {
+                updateError('All fields must be filled');
+                return;
+            }
+
+            const res = await fetch(`http://localhost:3000/api/newFoodId`, {
             method: 'POST',
-            headers: { id: foodId, name: updatedName, price: updatedPrice, stock: updatedStock }
+            headers: { name: name, price: price, stock: stock, resId: restaurantId }
             });
+            console.log(res)
             const foodStatus = await res.json();
 
-            updateError(foodStatus);
-        }
-
-        const removeFood = async () => {
-            const res = await fetch(`http://localhost:3000/api/food`, {
-                method: 'DELETE',
-                headers: { id: foodId }
-            });
-            const foodStatus = await res.json();
-    
             updateError(foodStatus);
         }
 
         return (
             <div className="space-y-12">
                 <div className="border-b border-gray-900/10 dark:border-gray-100/10 pb-12">
-                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Modify Menu Item - {foodName}</h2>
+                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Create Menu Item</h2>
                     <form>
-                        <Name foodName={foodName}/>
-                        <Price foodPrice={price}/>
-                        <Stock foodStock={foodStock}/>
+                        <Name foodName={'Chicken Nuggets'}/>
+                        <Price foodPrice={'10.00'}/>
+                        <Stock foodStock={'50'}/>
                     </form>
                 </div>
                 <div className="flex items-end space-x-1" aria-live='polite' aria-atomic='true'>
                     {errorStatus && <ErrorMessage message={errorStatus}/>}
                 </div>
                 <div className="flex justify-end mr-5">
-                    <div className="flex items-center">
-                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold flex rounded mr-5 items-center justify-center w-auto h-10 px-4 text-sm"
-                        onClick={removeFood}>
-                            Remove Item
-                        </button>
-                    </div>
                     <div className="flex items-center justify-end">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold flex rounded mr-5 items-center justify-center w-auto h-10 px-4 text-sm"
-                        onClick={updateFood}>
-                            Submit Changes
+                        onClick={createFood}>
+                            Submit Food Item
                         </button>
                     </div>
                 </div>
@@ -110,7 +96,7 @@ function ErrorMessage({message}) {
 }
 
 function Name( {foodName} ) {
-    const [name, setName] = useState(foodName);
+    const [name, setName] = useState('');
 
     return (
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -139,7 +125,7 @@ function Name( {foodName} ) {
 }
 
 function Price( {foodPrice} ) {
-    const [price, setPrice] = useState(foodPrice);
+    const [price, setPrice] = useState('');
     const [warning, setWarning] = useState(null);
 
     const handleChange = (e) => {
@@ -150,6 +136,7 @@ function Price( {foodPrice} ) {
             setPrice(inputValue);
             setWarning("");
         } else {
+            setPrice('');
             setWarning("Quantity can only be positive numbers with up to two decimal places");
         }
     }
@@ -182,7 +169,7 @@ function Price( {foodPrice} ) {
 }
 
 function Stock( {foodStock} ) {
-    const [stock, setStock] = useState(foodStock);
+    const [stock, setStock] = useState('');
     const [warning, setWarning] = useState(null);
 
     const handleChange = (e) => {
@@ -193,6 +180,7 @@ function Stock( {foodStock} ) {
             setStock(inputValue);
             setWarning('');
         } else {
+            setStock('');
             setWarning("Quantity can only be positive integers");
         }
     };
