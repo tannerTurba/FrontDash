@@ -5,9 +5,9 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function Page() {
+    const currentDate = new Date().toLocaleString();
     const [tipAmount, setTipAmount] = useState('0');
     const [activeButton, setActiveButton] = useState(null);
-    const currentDate = new Date().toLocaleString();
 
     const searchParams = useSearchParams();
     const restaurantName = searchParams.get('name');
