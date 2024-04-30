@@ -1,27 +1,27 @@
-'use client';
+'use client'
 
+import { User } from "@prisma/client";
 import { useState } from "react";
 
-export default function RestaurantRows(args) {
-    let restaurantData = args.data;
+export default function FdRows(args) {
+    let users = args.data as User[];
 
     return (
         <>
-            {restaurantData.map((restaurant) => {
-                let businessId = restaurant['businessId'];
-                let name = restaurant['name'];
-                let manager = restaurant['manager'];
-                const [status, setStatus] = useState(restaurant['status']);
+            {users.map((user) => {
+                let username = user['username'];
+                let id = `${user['id']}`;
+                const [status, setStatus] = useState(user['status']);
 
-                const activateRestaurant = async () => {
-                    const res = await fetch(`http://localhost:3000/api/restaurants/${businessId}`, {
+                const activateUser = async () => {
+                    const res = await fetch(`http://localhost:3000/api/frontdash/${id}`, {
                         method: 'POST',
                         headers: { actionType: 'activate' }
                     });
                 }
                 
-                const withdrawRestaurant = async () => {
-                    const res = await fetch(`http://localhost:3000/api/restaurants/${businessId}`, {
+                const deactivateEmployee = async () => {
+                    const res = await fetch(`http://localhost:3000/api/frontdash/${id}`, {
                         method: 'POST',
                         headers: { actionType: 'withdraw' }
                     });
@@ -30,7 +30,7 @@ export default function RestaurantRows(args) {
                 let activate = ( 
                     <button 
                         onClick={async (event) => {
-                            await activateRestaurant();
+                            await activateUser();
                             setStatus("active");
                             setAction(deactivate);
                         }} 
@@ -42,7 +42,7 @@ export default function RestaurantRows(args) {
                 let deactivate = ( 
                     <button 
                         onClick={async (event) => {
-                            await withdrawRestaurant();
+                            await deactivateEmployee();
                             setStatus('inactive');
                             setAction(activate);
                         }} 
@@ -67,12 +67,12 @@ export default function RestaurantRows(args) {
                 const [actionButton, setAction] = useState(getButton(status));
                 
                 return (
-                    <tr key={businessId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <tr key={id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {name}
+                            {username}
                         </th>
                         <td className="px-6 py-4">
-                            {manager}
+                            {id}
                         </td>
                         <td className="px-6 py-4">
                             {status}

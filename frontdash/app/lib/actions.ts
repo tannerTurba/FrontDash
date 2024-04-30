@@ -3,7 +3,7 @@
 import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
 import { registerRestaurant, updateHours } from '@/app/lib/restaurant';
-import { registerDriver, registerEmployee, updateContactInfo } from './employees';
+import { registerDriver, registerEmployee, registerFdEmployee, updateContactInfo } from './employees';
 
 export async function authenticate (
   prevState: string | undefined,
@@ -105,6 +105,19 @@ export async function submitDriver (
   };
   
   return await registerDriver(data);
+}
+
+export async function submitFdEmployee (
+  prevState: string | undefined,
+  formData: FormData
+) {
+  const data = {
+    firstName: formData.get('first-name').toString(),
+    lastName: formData.get('last-name').toString(),
+    phone: formData.get('phone').toString()
+  };
+  
+  return await registerFdEmployee(data);
 }
 
 export async function changeHours(
