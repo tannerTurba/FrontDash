@@ -1,4 +1,4 @@
-import { assignDriver } from "@/scripts/order";
+import { assignDriver, formatDate } from "@/scripts/order";
 import { updateUserStatus } from "@/scripts/user";
 import { headers } from "next/headers";
 
@@ -7,10 +7,14 @@ export async function POST(
     { params }: { params: { orderId: string } }
 ) {
     const headersList = headers();
-    const driverId = headersList.get('driverId');
-    const id = params.orderId;
+    const driverId = Number.parseInt(headersList.get('driverId'));
+    const id = Number.parseInt(params.orderId);
 
-    await assignDriver(id, driverId);
+    // Delivery time is 10-15 minutes(in milliseconds) from now.
+    let deliveryTime = new Date(Date.now() + (((Math.random() * 5) + 10) * 60 * 1000));
+    console.log(formatDate(deliveryTime));
+
+    await assignDriver(id, driverId, deliveryTime);
     await updateUserStatus(driverId, 'busy');
 
     const responseBody = { };
