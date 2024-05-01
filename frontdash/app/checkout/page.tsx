@@ -4,7 +4,7 @@ export default async function Page() {
 
     return (
         <main>
-            <div className="flex justify-end my-2 mx-4">
+            <div className="flex">
                 <OrderDetailsForm/>
             </div>
         </main>

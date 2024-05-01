@@ -1,6 +1,6 @@
 'use server';
 import { ZodError, z } from 'zod';
-import { createOrder, getPaidWith, insertPaidWith, insertOrderContains, insertOrderFrom } from '@/scripts/order';
+import { createOrder, getPaidWith, insertPaidWith, insertOrderContains, insertOrderFrom, insertCreditCard } from '@/scripts/order';
 
 
 export async function registerOrder(data: Object) : Promise<string> {
@@ -8,7 +8,14 @@ export async function registerOrder(data: Object) : Promise<string> {
         .object({ 
             time: z.date(),
             price: z.number(),
-            tips: z.number()
+            tips: z.number(),
+            cardNumber: z.string().regex(/[0-9]{16}/, {
+                message: 'Invalid card number. Check formatting: xxxxxxxxxxxxxxxx'
+            }),
+            expirationDate: z.string(),
+            securityCode: z.string().regex(/[0-9]{3}/, {
+                message: 'Invalid CVV. Check formatting: xxx'
+            }),
         })
         .safeParse(data);
 
@@ -16,13 +23,18 @@ export async function registerOrder(data: Object) : Promise<string> {
         const { 
             time, 
             price, 
-            tips
+            tips,
+            cardNumber,
+            expirationDate,
+            securityCode,
         } = parsedOrder.data;
-
         // Create new order row
-        let order = await createOrder({ time, price, tips });
+        let cvvInt = Number(securityCode);
+        //let order = await createOrder({ time, price, tips });
+        let cNumber = await insertCreditCard({cardNumber, cvvInt, expirationDate});
         
-        return `Success! Order ID: ${order.id}`;
+       // return `Success! Order ID: ${order}`;
+        return `Success! Card Number: ${cNumber}`;
     }
     let err = parsedOrder as { error: ZodError };
     let messages = err.error.errors.map((x) => x.message);

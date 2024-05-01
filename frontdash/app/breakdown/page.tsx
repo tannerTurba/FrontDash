@@ -60,7 +60,7 @@ export default function Page() {
           </div>
           <div className="mt-4 flex justify-end">
            
-            <Link href="/checkout"> 
+            <Link href="/checkout" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> 
               Checkout
               </Link>
           </div>
@@ -70,4 +70,3 @@ export default function Page() {
 
 
 
-//  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

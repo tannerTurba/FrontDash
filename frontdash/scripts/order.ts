@@ -80,3 +80,25 @@ export async function createOrder(data: OrderData) : Promise<string> {
   }
   return null;
 }
+
+export async function insertCreditCard(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    
+  try {
+    const newCard = await prisma.creditCard.create({
+       
+        data: {
+        cardNumber: data.cardNumber,
+        expirationDate: data.expirationDate,
+        securityCode: data.cvvInt,
+
+      },
+    });
+    return newCard.cardNumber.toString();
+  } catch (error) {
+    console.error('Error creating Order:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}

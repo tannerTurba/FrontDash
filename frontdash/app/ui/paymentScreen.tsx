@@ -7,11 +7,11 @@ import {
   } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
-import { submitRestaurant } from '@/app/lib/actions';
+import { submitOrder } from '@/app/lib/actions';
 import Link from 'next/link';
 
   export default function CheckoutForm() {
-    const [errorMessage, dispatch] = useFormState(submitRestaurant, undefined);
+    const [errorMessage, dispatch] = useFormState(submitOrder, undefined);
 
     return (
     <form action={dispatch} className="space-y-3">
@@ -34,7 +34,7 @@ import Link from 'next/link';
                                 name="cardNumber"
                                 id="cardNumber"
                                 autoComplete="cardNumber"
-                                required
+                                //required
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                                 placeholder="1234 5678 9012 3456"
                                 />
@@ -49,11 +49,11 @@ import Link from 'next/link';
                         <div className="mt-2">
                             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-600 dark:focus-within:ring-blue-400 sm:max-w-md">
                                 <input
-                                type="text"
+                                type="month"
                                 name="expirationDate"
                                 id="expirationDate"
                                 autoComplete="expirationDate"
-                                required
+                                //required
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                                 placeholder="05/25"
                                 />
@@ -72,7 +72,7 @@ import Link from 'next/link';
                                 name="securityCode"
                                 id="securityCode"
                                 autoComplete="securityCode"
-                                required
+                                //required
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                                 placeholder="123"
                                 />
@@ -85,7 +85,7 @@ import Link from 'next/link';
             <div className="border-b border-gray-900/10 dark:border-gray-100/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Contact Information</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-600">
-                    This should be the person responsible for handeling customer questions. The address is where orders will be picked up for delivery.
+                    Please enter your contact/delivery information
                 </p>
 
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -99,7 +99,7 @@ import Link from 'next/link';
                                 name="first-name"
                                 id="firstName"
                                 autoComplete="given-name"
-                                required
+                                //required
                                 placeholder='Ronald'
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -116,7 +116,7 @@ import Link from 'next/link';
                                 name="last-name"
                                 id="lastName"
                                 autoComplete="family-name"
-                                required
+                                //required
                                 placeholder='McDonald'
                                 className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -133,7 +133,7 @@ import Link from 'next/link';
                             name="email"
                             type="email"
                             autoComplete="email"
-                            required
+                            //required
                             placeholder='superSized@gmail.com'
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -151,7 +151,7 @@ import Link from 'next/link';
                             type="tel"
                             autoComplete="phone"
                             placeholder='xxxxxxxxxx'
-                            required
+                            //required
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -198,7 +198,7 @@ import Link from 'next/link';
                             id="streetAddress"
                             autoComplete="street-address"
                             placeholder='110 N Carpenter St'
-                            required
+                            //required
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -213,7 +213,7 @@ import Link from 'next/link';
                             type="text"
                             name="city"
                             id="city"
-                            required
+                            //required
                             placeholder='Chicago'
                             autoComplete="address-level2"
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
@@ -231,7 +231,7 @@ import Link from 'next/link';
                             name="state"
                             id="state"
                             placeholder='IL'
-                            required
+                            //required
                             autoComplete="address-level1"
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"
                             />
@@ -247,7 +247,7 @@ import Link from 'next/link';
                             type="text"
                             name="postal-code"
                             id="postal-code"
-                            required
+                            //required
                             placeholder='60607'
                             autoComplete="postal-code"
                             className="dark:bg-gray-900 px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-600 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-400 sm:text-sm sm:leading-6"

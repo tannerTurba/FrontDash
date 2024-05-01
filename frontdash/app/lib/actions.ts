@@ -125,9 +125,22 @@ export async function submitOrder (
   formData: FormData
 ) {
   const data = {
-    time: formData.get('time').toString(),
-    price: formData.get('price').toString(),
-    tips: formData.get('tips').toString()
+    cardNumber: formData.get('cardNumber').toString(),
+    expirationDate: formData.get('expirationDate').toString(),
+    securityCode: formData.get('securityCode').toString(),
+    firstName: formData.get('first-name').toString(),
+    lastName: formData.get('last-name').toString(),
+    email: formData.get('email').toString(),
+    phone: formData.get('phone').toString(),
+    buildingNumber: formData.get('buildingNumber').toString(),
+    unitNumber: formData.get('unitNumber').toString(),
+    streetAddress: formData.get('street-address').toString(),
+    city: formData.get('city').toString(),
+    state: formData.get('state').toString(),
+    zip: formData.get('postal-code').toString(),
+    price: 4,
+    tips: 1,
+    time: new Date()
   };
   
   return await registerOrder(data);
