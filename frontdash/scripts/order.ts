@@ -56,3 +56,27 @@ export function formatDate(date) {
   
     return dateString;
 }
+
+export async function createOrder(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    
+  try {
+    const newOrder = await prisma.order.create({
+       
+        data: {
+        time: data.time,
+        deliveryTime: data.time,
+        status: 'active',
+        price: data.price,
+        tips: data.tips,
+
+      },
+    });
+    return newOrder.id.toString();
+  } catch (error) {
+    console.error('Error creating Order:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}

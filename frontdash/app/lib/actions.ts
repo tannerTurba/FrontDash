@@ -4,7 +4,7 @@ import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
 import { registerRestaurant, updateHours } from '@/app/lib/restaurant';
 import { registerDriver, registerEmployee, registerFdEmployee, updateContactInfo } from './employees';
-
+import { registerOrder } from './order';
 export async function authenticate (
   prevState: string | undefined,
   formData: FormData,
@@ -118,6 +118,19 @@ export async function submitFdEmployee (
   };
   
   return await registerFdEmployee(data);
+}
+
+export async function submitOrder ( 
+  prevState: string | undefined,
+  formData: FormData
+) {
+  const data = {
+    time: formData.get('time').toString(),
+    price: formData.get('price').toString(),
+    tips: formData.get('tips').toString()
+  };
+  
+  return await registerOrder(data);
 }
 
 export async function changeHours(
