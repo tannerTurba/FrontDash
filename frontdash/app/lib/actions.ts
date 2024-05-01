@@ -138,8 +138,9 @@ export async function submitOrder (
     city: formData.get('city').toString(),
     state: formData.get('state').toString(),
     zip: formData.get('postal-code').toString(),
-    price: 4,
-    tips: 1,
+    price: formData.get('price'),
+    tips: formData.get('tips'),
+    restaurantId: formData.get('restaurantId'),
     time: new Date()
   };
   

@@ -14,15 +14,22 @@ import Link from 'next/link';
   export default function CheckoutForm() {
     const [errorMessage, dispatch] = useFormState(submitOrder, undefined);
     const searchParams = useSearchParams();
-    const restaurantId = searchParams.get('name');
-    console.log(restaurantId);
+    const encodedString = searchParams.get('order');
+    const restaurantId = searchParams.get('id');
+    const decodedString = decodeURIComponent(encodedString);
+    const cartItems = decodedString ? JSON.parse(decodedString) : [];
+
+    const rawTotal = cartItems.reduce((total, item) => {
+        return total + (item.price * item.value) * 1.06;
+    }, 0);
+    const tips = searchParams.get('tips');
     return (
     <form action={dispatch} className="space-y-3">
         <div className="space-y-12">
             <div className="border-b border-gray-900/10 dark:border-gray-100/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Checkout</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-600">
-                    Please Enter your payment information. {restaurantId}
+                    Please Enter your payment information. 
                 </p>
 
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -82,6 +89,9 @@ import Link from 'next/link';
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" name="tips" value= {tips} />
+                    <input type="hidden" name="restaurantId" value= {restaurantId} />
+                    <input type="hidden" name="price" value= {rawTotal} />
                 </div>
             </div>
 

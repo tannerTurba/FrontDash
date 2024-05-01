@@ -1,14 +1,16 @@
 'use server';
 import { ZodError, z } from 'zod';
-import { createOrder, getPaidWith, insertPaidWith, insertOrderContains, insertOrderFrom, insertCreditCard } from '@/scripts/order';
+import { createOrder, insertPaidWith, insertOrderFrom, insertCreditCard } from '@/scripts/order';
+import { parse } from 'path';
 
 
 export async function registerOrder(data: Object) : Promise<string> {
     const parsedOrder = z
         .object({ 
             time: z.date(),
-            price: z.number(),
-            tips: z.number(),
+            price: z.string(),
+            tips: z.string(),
+            restaurantId: z.string(),
             cardNumber: z.string().regex(/[0-9]{16}/, {
                 message: 'Invalid card number. Check formatting: xxxxxxxxxxxxxxxx'
             }),
@@ -24,18 +26,20 @@ export async function registerOrder(data: Object) : Promise<string> {
             time, 
             price, 
             tips,
+            restaurantId,
             cardNumber,
             expirationDate,
             securityCode,
         } = parsedOrder.data;
         // Create new order row
         let cvvInt = Number(securityCode);
-        // let order = await createOrder({ time, price, tips });
+        let priceFloat = parseFloat(price);
+        let tipsFloat = parseFloat(tips);
+        let order = await createOrder({ time, tipsFloat, priceFloat });
         let cNumber = await insertCreditCard({cardNumber, cvvInt, expirationDate});
         
-        console.log(restaurantName);
        // return `Success! Order ID: ${order}`;
-        return `Success! Card Number: ${cNumber}`;
+        return `Success! OrderId: ${order}`;
     }
     let err = parsedOrder as { error: ZodError };
     let messages = err.error.errors.map((x) => x.message);
