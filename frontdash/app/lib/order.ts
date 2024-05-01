@@ -30,9 +30,10 @@ export async function registerOrder(data: Object) : Promise<string> {
         } = parsedOrder.data;
         // Create new order row
         let cvvInt = Number(securityCode);
-        //let order = await createOrder({ time, price, tips });
+        // let order = await createOrder({ time, price, tips });
         let cNumber = await insertCreditCard({cardNumber, cvvInt, expirationDate});
         
+        console.log(restaurantName);
        // return `Success! Order ID: ${order}`;
         return `Success! Card Number: ${cNumber}`;
     }

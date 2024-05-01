@@ -1,5 +1,5 @@
 
-'use client';
+
 
 import {
     ExclamationCircleIcon,
@@ -8,18 +8,21 @@ import {
 import { Button } from '@/app/ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { submitOrder } from '@/app/lib/actions';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
   export default function CheckoutForm() {
     const [errorMessage, dispatch] = useFormState(submitOrder, undefined);
-
+    const searchParams = useSearchParams();
+    const restaurantId = searchParams.get('name');
+    console.log(restaurantId);
     return (
     <form action={dispatch} className="space-y-3">
         <div className="space-y-12">
             <div className="border-b border-gray-900/10 dark:border-gray-100/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">Checkout</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-600">
-                    Please Enter your payment information.
+                    Please Enter your payment information. {restaurantId}
                 </p>
 
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
