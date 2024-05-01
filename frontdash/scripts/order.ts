@@ -119,3 +119,20 @@ export async function insertPaidWith(data: OrderData) : Promise<string> {
   }
   return null;
 }
+
+export async function insertOrderFrom(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    try {
+        const newFrom = await prisma.$executeRaw`
+          INSERT INTO \`From\` (orderId, businessId)
+          VALUES (${data.orderId}, ${data.businessId})
+        `;
+        return "Success!";
+      }
+  catch (error) {
+    console.error('Error creating Paidwith:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}

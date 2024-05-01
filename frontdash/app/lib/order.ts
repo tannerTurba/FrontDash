@@ -38,8 +38,11 @@ export async function registerOrder(data: Object) : Promise<string> {
         let order = await createOrder({ time, tipsFloat, priceFloat });
         let cNumber = await insertCreditCard({cardNumber, cvvInt, expirationDate});
         let paidWith = await insertPaidWith({cardNumber: cNumber, orderId: order});
-       // return `Success! Order ID: ${order}`;
-        return `Success! OrderId: ${order}`;
+        
+        console.log(restaurantId);
+        let orderFrom = await insertOrderFrom({orderId: order, businessId: restaurantId});
+       
+       return `Success! OrderId: ${order}`;
     }
     let err = parsedOrder as { error: ZodError };
     let messages = err.error.errors.map((x) => x.message);
