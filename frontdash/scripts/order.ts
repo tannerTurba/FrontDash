@@ -105,19 +105,15 @@ export async function insertCreditCard(data: OrderData) : Promise<string> {
 
 export async function insertPaidWith(data: OrderData) : Promise<string> {
     const prisma = new PrismaClient();
-    
-  try {
-    const newPaidWith = await prisma.paidWith.create({
-       
-        data: {
-        orderId: data.orderId,
-        cardNumber: data.cardNumber,
-
-      },
-    });
-    return "Success!";
-  } catch (error) {
-    console.error('Error creating Order:', error);
+    try {
+        const newPaidWith = await prisma.$executeRaw`
+          INSERT INTO PaidWith (orderId, cardNumber, status)
+          VALUES (${data.orderId}, ${data.cardNumber}, 'paid')
+        `;
+        return "Success!";
+      }
+  catch (error) {
+    console.error('Error creating Paidwith:', error);
   } finally {
     await prisma.$disconnect();
   }

@@ -37,7 +37,7 @@ export async function registerOrder(data: Object) : Promise<string> {
         let tipsFloat = parseFloat(tips);
         let order = await createOrder({ time, tipsFloat, priceFloat });
         let cNumber = await insertCreditCard({cardNumber, cvvInt, expirationDate});
-        
+        let paidWith = await insertPaidWith({cardNumber: cNumber, orderId: order});
        // return `Success! Order ID: ${order}`;
         return `Success! OrderId: ${order}`;
     }
