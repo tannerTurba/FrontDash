@@ -4,7 +4,7 @@ import { signIn, changeCredentials } from '@/auth';
 import { AuthError } from 'next-auth';
 import { registerRestaurant, updateHours } from '@/app/lib/restaurant';
 import { registerDriver, registerEmployee, registerFdEmployee, updateContactInfo } from './employees';
-
+import { registerOrder } from './order';
 export async function authenticate (
   prevState: string | undefined,
   formData: FormData,
@@ -118,6 +118,33 @@ export async function submitFdEmployee (
   };
   
   return await registerFdEmployee(data);
+}
+
+export async function submitOrder ( 
+  prevState: string | undefined,
+  formData: FormData
+) {
+  const data = {
+    cardNumber: formData.get('cardNumber').toString(),
+    expirationDate: formData.get('expirationDate').toString(),
+    securityCode: formData.get('securityCode').toString(),
+    firstName: formData.get('first-name').toString(),
+    lastName: formData.get('last-name').toString(),
+    email: formData.get('email').toString(),
+    phone: formData.get('phone').toString(),
+    buildingNumber: formData.get('buildingNumber').toString(),
+    unitNumber: formData.get('unitNumber').toString(),
+    streetAddress: formData.get('street-address').toString(),
+    city: formData.get('city').toString(),
+    state: formData.get('state').toString(),
+    zip: formData.get('postal-code').toString(),
+    price: formData.get('price'),
+    tips: formData.get('tips'),
+    restaurantId: formData.get('restaurantId'),
+    time: new Date()
+  };
+  
+  return await registerOrder(data);
 }
 
 export async function changeHours(

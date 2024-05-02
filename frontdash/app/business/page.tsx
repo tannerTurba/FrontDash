@@ -40,7 +40,7 @@ export default async function Page() {
       if (cart.length === 0) {
         alert("Cart is empty!");
       } else {
-        window.location.href = `/breakdown?name=${restaurantInfo.restaurant?.name}&order=${encodeURIComponent(JSON.stringify(cart))}`;
+        window.location.href = `/breakdown?name=${restaurantInfo.restaurant?.name}&order=${encodeURIComponent(JSON.stringify(cart))}&id=${restaurantId}`;
       }
     }
 

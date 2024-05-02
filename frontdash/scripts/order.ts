@@ -56,3 +56,83 @@ export function formatDate(date) {
   
     return dateString;
 }
+
+export async function createOrder(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    
+  try {
+    const newOrder = await prisma.order.create({
+       
+        data: {
+        time: data.time,
+        deliveryTime: data.time,
+        status: 'active',
+        price: data.priceFloat,
+        tips: data.tipsFloat,
+
+      },
+    });
+    return newOrder.id.toString();
+  } catch (error) {
+    console.error('Error creating Order:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}
+
+export async function insertCreditCard(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    
+  try {
+    const newCard = await prisma.creditCard.create({
+       
+        data: {
+        cardNumber: data.cardNumber,
+        expirationDate: data.expirationDate,
+        securityCode: data.cvvInt,
+
+      },
+    });
+    return newCard.cardNumber.toString();
+  } catch (error) {
+    console.error('Error creating Order:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}
+
+export async function insertPaidWith(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    try {
+        const newPaidWith = await prisma.$executeRaw`
+          INSERT INTO PaidWith (orderId, cardNumber, status)
+          VALUES (${data.orderId}, ${data.cardNumber}, 'paid')
+        `;
+        return "Success!";
+      }
+  catch (error) {
+    console.error('Error creating Paidwith:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}
+
+export async function insertOrderFrom(data: OrderData) : Promise<string> {
+    const prisma = new PrismaClient();
+    try {
+        const newFrom = await prisma.$executeRaw`
+          INSERT INTO \`From\` (orderId, businessId)
+          VALUES (${data.orderId}, ${data.businessId})
+        `;
+        return "Success!";
+      }
+  catch (error) {
+    console.error('Error creating Paidwith:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return null;
+}

@@ -12,6 +12,7 @@ export default function Page() {
     const searchParams = useSearchParams();
     const restaurantName = searchParams.get('name');
     const encodedString = searchParams.get('order');
+    const restaurantId = searchParams.get('id');
     const decodedString = decodeURIComponent(encodedString);
     const cartItems = decodedString ? JSON.parse(decodedString) : [];
 
@@ -59,8 +60,14 @@ export default function Page() {
             </div>
           </div>
           <div className="mt-4 flex justify-end">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Checkout</button>
+           
+            <Link href={`/checkout/?id=${restaurantId}&order=${encodedString}&tips=${tipAmount}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> 
+              Checkout
+              </Link>
           </div>
         </div>
     );
 }
+
+
+

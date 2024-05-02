@@ -38,8 +38,9 @@ export const authConfig = {
       const isOnMenu = nextUrl.pathname.endsWith('/menu');
       const isOnBusiness = nextUrl.pathname.includes('business');
       const isOnCart = nextUrl.pathname.includes('breakdown');
+      const isOnBreakdown = nextUrl.pathname.includes('checkout');
 
-      if (!isOnDashboard && !isOnLogIn && !isOnRegistration && !isOnMenu && !isOnBusiness && !isOnCart) {
+      if (!isOnDashboard && !isOnLogIn && !isOnRegistration && !isOnMenu && !isOnBusiness && !isOnCart && !isOnBreakdown) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn && isOnLogIn) {
