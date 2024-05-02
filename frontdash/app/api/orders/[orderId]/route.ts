@@ -1,4 +1,4 @@
-import { assignDriver, formatDate } from "@/scripts/order";
+import { assignDriver, formatDate, getOrderStatus } from "@/scripts/order";
 import { updateUserStatus } from "@/scripts/user";
 import { headers } from "next/headers";
 
@@ -25,4 +25,21 @@ export async function POST(
             'Content-Type': 'application/json'
         }
     });
+}
+
+export async function GET(
+    req: Request
+) {
+    try {
+        const headersList = headers();
+        const orderId = headersList.get('id');
+
+        const id = parseInt(orderId);
+
+        const orderStatus = await getOrderStatus(id);
+        return Response.json(orderStatus);
+    }
+    catch (error) {
+        console.error('Error: ', error);
+    }
 }
