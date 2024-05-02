@@ -16,17 +16,16 @@ export default function Page() {
 
   const checkStatus = async () => {
     if (!orderNumber) {
-        setWarning("OrderId field is empty.");
-        return;
+      setWarning("OrderId field is empty.");
+      return;
     }
 
     const res = await fetch(`http://localhost:3000/api/orders/${orderNumber}`, {
         method: 'GET',
-        headers: { id: orderNumber}
+        // headers: { id: orderNumber}
     });
-    const orderStatus = await res.json();
-console.log(orderStatus);
-    updateStatus('Your order is: ' + orderStatus.status);
+    const orderStatus = (await res.json()).status;
+    updateStatus('Your order is: ' + orderStatus);
   };
 
   return (
