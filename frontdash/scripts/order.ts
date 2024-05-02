@@ -22,11 +22,12 @@ export async function assignDriver(orderId, driverId, deliveryTime) {
     try {
         orders = await prisma.order.update({
             where: {
-                id: orderId
+              id: orderId
             },
             data: {
-                driverId: driverId,
-                deliveryTime: deliveryTime
+              driverId: driverId,
+              deliveryTime: deliveryTime,
+              status: "waiting"
             }
         });
     } catch (error) {
@@ -57,7 +58,7 @@ export function formatDate(date) {
     return dateString;
 }
 
-export async function createOrder(data: OrderData) : Promise<string> {
+export async function createOrder(data) : Promise<string> {
     const prisma = new PrismaClient();
     
   try {
@@ -81,7 +82,7 @@ export async function createOrder(data: OrderData) : Promise<string> {
   return null;
 }
 
-export async function insertCreditCard(data: OrderData) : Promise<string> {
+export async function insertCreditCard(data) : Promise<string> {
     const prisma = new PrismaClient();
     
   try {
@@ -103,7 +104,7 @@ export async function insertCreditCard(data: OrderData) : Promise<string> {
   return null;
 }
 
-export async function insertPaidWith(data: OrderData) : Promise<string> {
+export async function insertPaidWith(data) : Promise<string> {
     const prisma = new PrismaClient();
     try {
         const newPaidWith = await prisma.$executeRaw`
@@ -120,7 +121,7 @@ export async function insertPaidWith(data: OrderData) : Promise<string> {
   return null;
 }
 
-export async function insertOrderFrom(data: OrderData) : Promise<string> {
+export async function insertOrderFrom(data) : Promise<string> {
     const prisma = new PrismaClient();
     try {
         const newFrom = await prisma.$executeRaw`
@@ -152,4 +153,25 @@ export async function insertPlaces(data: OrderData) : Promise<string> {
     await prisma.$disconnect();
   }
   return null;
+}
+
+export async function getOrderStatus(orderNum: number): Promise<string> {
+  const prisma = new PrismaClient();
+  let status = '';
+    try {
+        status = (await prisma.order.findUnique({
+          where: {
+            id: orderNum
+          },
+          select: {
+            status: true
+          }
+        })).status;
+      }
+  catch (error) {
+    console.error('Error getting order status:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  return status;
 }

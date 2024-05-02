@@ -93,7 +93,7 @@ export async function getContactInfoByBusiness(businessId: number) {
         contactInfo = await prisma.$queryRaw`
             SELECT ci.*
             FROM ContactInfo ci
-            INNER JOIN ReachedAt ra ON ci.id = ra.contactId
+            INNER JOIN ReachedAt ra ON ci.id = ra.contactId OR ci.id = ra.contactId2
             WHERE ra.businessId = ${businessId};
         `;
     } catch (error) {

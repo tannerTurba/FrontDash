@@ -7,7 +7,8 @@ import {
   ClockIcon,
   PencilSquareIcon,
   BuildingStorefrontIcon,
-  TruckIcon
+  TruckIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -22,27 +23,28 @@ let register = { name: 'Register', href: '/registration', icon: PencilSquareIcon
 let restaurants = { name: 'Restaurants', href: '/restaurants', icon: BuildingStorefrontIcon };
 let drivers = { name: 'Drivers', href: '/drivers', icon: TruckIcon };
 let frontdash = { name: 'Frontdash', href: '/frontdash', icon: UserGroupIcon };
+let orderStatus = { name: 'Status', href: '/status', icon: CheckCircleIcon };
 
 function getLinks(userRole, status) {
   if (userRole == 'manager' && status == 'active') {
-    return [order, management, menu, restaurantHours];
+    return [order, management, menu, restaurantHours, orderStatus];
   }
   else if (userRole == 'manager' && status == 'pending') {
     return [];
   }
   else if (userRole == 'employee') {
-    return [order, menu, restaurantHours];
+    return [order, menu, restaurantHours, orderStatus];
   }
   else if (userRole == 'frontdash') {
-    return [restaurants, drivers, orderQueue];
+    return [restaurants, drivers, orderQueue, orderStatus];
   }
   else if (userRole == 'driver') {
     return [];
   }
   else if (userRole == 'admin') {
-    return [frontdash, restaurants, drivers, orderQueue];
+    return [frontdash, restaurants, drivers, orderQueue, orderStatus];
   }
-  return [register];
+  return [register, orderStatus];
 }
 
 export default async function NavLinks(args) {

@@ -32,7 +32,6 @@ export default function Page() {
             method: 'POST',
             headers: { name: name, price: price, stock: stock, resId: restaurantId }
             });
-            console.log(res)
             const foodStatus = await res.json();
 
             updateError(foodStatus);
