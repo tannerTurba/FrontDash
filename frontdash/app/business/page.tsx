@@ -15,7 +15,6 @@ export default async function Page() {
     });
     const restaurantInfo = await res.json();
     
-    const contact = restaurantInfo.contactInfo[0];
     const hours = restaurantInfo.availability[0];
 
     let cart = [];
@@ -63,12 +62,7 @@ export default async function Page() {
               <p className="text-gray-700">Saturday: {hours?.satOpen.toLocaleString([], {hour: '2-digit', minute:'2-digit'})} - {hours?.satClose.toLocaleString([], {hour: '2-digit', minute:'2-digit'})}</p>
               <p className="text-gray-700">Sunday: {hours?.sunOpen.toLocaleString([], {hour: '2-digit', minute:'2-digit'})} - {hours?.sunClose.toLocaleString([], {hour: '2-digit', minute:'2-digit'})}</p>
             </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-2">Contact Information</h2>
-                <p className="text-gray-700">Name: {contact?.firstName} {contact?.lastName}</p>
-                <p className="text-gray-700">Address: {contact?.buildingNumber} {contact?.street} {contact?.unitNumber}, {contact?.city}, {contact?.state} {contact?.zipCode}</p>
-                <p className="text-gray-700">Phone Number: {contact?.phoneNumber}</p>
-              </div>
+              <Contact contactInfo={restaurantInfo.contactInfo}/>
             </div>
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-2">Menu</h2>
@@ -170,6 +164,39 @@ function MenuItem({ item, editCart }) {
         </button>
       </div>
       {warning && <p className="absolute bottom-0 right-0 text-red-600 text-s">{warning}</p>}
+    </div>
+  );
+}
+
+function Contact({ contactInfo }) {
+  const [selectedContactIndex, setSelectedContactIndex] = useState(0);
+  const contact = contactInfo[selectedContactIndex];
+
+  const handleContactChange = (e) => {
+    setSelectedContactIndex(parseInt(e.target.value));
+  };
+
+  return (
+    <div>
+      <div className="flex items-center mb-4">
+        <h2 className="text-xl font-semibold mr-2">Contact Information</h2>
+        <select
+          id="contactSelect"
+          value={selectedContactIndex}
+          onChange={handleContactChange}
+        >
+          {contactInfo.map((contact, index) => (
+            <option key={index} value={index}>
+              {contact.city}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <p className="text-gray-700">Name: {contact?.firstName} {contact?.lastName}</p>
+        <p className="text-gray-700">Address: {contact?.buildingNumber} {contact?.street} {contact?.unitNumber}, {contact?.city}, {contact?.state} {contact?.zipCode}</p>
+        <p className="text-gray-700">Phone Number: {contact?.phoneNumber}</p>
+      </div>
     </div>
   );
 }
